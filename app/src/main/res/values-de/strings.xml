@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="class_string">Klasse</string>
+    <string name="create">Erstellen!</string>
+    <string name="flag">Markieren!</string>
+    <string name="loading">Lade...</string>
+    <string name="media">Medium</string>
+    <string name="number">Nummer(n)</string>
+    <string name="page">Seite(n)</string>
+    <string name="password">Passwort</string>
+    <string name="register">Registrieren!</string>
+    <string name="register_toolbar">Registrieren</string>
+    <string name="school">Schule (GANZER Name)</string>
+    <string name="done">Erledigt!</string>
+    <string name="settings_toolbar">Einstellungen</string>
+    <string name="subject">Fach</string>
+    <string name="until">Bis</string>
+    <string name="username">Benutzername</string>
+</resources>

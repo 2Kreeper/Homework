@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Homework</string>
+    <string name="app_name" translatable="false">Homework</string>
 
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -18,14 +18,14 @@
 
     <!-- Buttons -->
     <string name="create">Create!</string>
-    <string name="done" translatable="false">Done!</string>
+    <string name="done">Done!</string>
     <string name="flag">Flag!</string>
-    <string name="login">Login!</string>
+    <string name="login" translatable="false">Login!</string>
     <string name="register">Register!</string>
 
     <!-- Toolbar titles -->
     <string name="settings_toolbar">Settings</string>
-    <string name="register_toolbar">Register!</string>
-    <string name="login_toolbar">Login</string>
+    <string name="register_toolbar">Register</string>
+    <string name="login_toolbar" translatable="false">Login</string>
 
 </resources>
