@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_wrapper_margin"
+    android:paddingLeft="@dimen/activity_wrapper_margin"
+    android:paddingRight="@dimen/activity_wrapper_margin"
+    android:paddingTop="@dimen/activity_wrapper_margin"
+    tools:context="eu.baron_online.homework.LoginActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        ></include>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:layout_below="@+id/loginUsernameInput"
+        android:layout_alignStart="@+id/loginUsernameInput"
+        android:layout_marginTop="49dp"
+        android:id="@+id/loginPasswordInput"
+        android:hint="@string/login_password" />
+
+    <Button
+        android:text="@string/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="63dp"
+        android:id="@+id/loginButton"
+        android:textSize="18sp"
+        android:layout_below="@+id/loginPasswordInput"
+        android:layout_alignStart="@+id/loginPasswordInput"
+        android:layout_alignEnd="@+id/loginPasswordInput" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_marginTop="87dp"
+        android:id="@+id/loginUsernameInput"
+        android:hint="@string/login_username"
+        android:layout_below="@+id/toolbar"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/loginButton"
+        android:layout_alignStart="@+id/loginButton"
+        android:layout_below="@+id/loginButton"
+        android:text="Register!"
+        android:textSize="18sp" />
+
+</RelativeLayout>
