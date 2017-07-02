@@ -4,8 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import org.apache.commons.codec.binary.Hex;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 public class ToolbarActivity extends AppCompatActivity {
@@ -55,6 +64,24 @@ public class ToolbarActivity extends AppCompatActivity {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected String sha256(String text) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(text.getBytes(StandardCharsets.UTF_8));
+
+            String sha256text = Base64.encodeToString(hash, Base64.DEFAULT);
+
+            Log.v("baron-online.eu", "sha256-result: " + sha256text);
+
+            return sha256text;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        Toast.makeText(getApplicationContext(), "Unabled to hash '" + text + "'!", Toast.LENGTH_SHORT);
+        return null;
     }
 
     protected void setToolbarTitle(CharSequence title) {

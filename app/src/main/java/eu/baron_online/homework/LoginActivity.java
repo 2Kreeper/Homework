@@ -57,7 +57,7 @@ public class LoginActivity extends ToolbarActivity {
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                 } else {
-                    new CheckForUser().execute(username.getText().toString(), password.getText().toString());
+                    new CheckForUser().execute(username.getText().toString(), sha256(password.getText().toString()));
                 }
             }
         });
@@ -75,8 +75,8 @@ public class LoginActivity extends ToolbarActivity {
             boolean userExists = result.getInt("success") == 1;
 
             if(userExists) {
-                DataInterchange.addValue("username", username.getText().toString());
-                DataInterchange.addValue("password", password.getText().toString());
+                DataInterchange.addValue("username", result.getString("USERNAME"));
+                DataInterchange.addValue("password", result.getString("PASSWORD"));
                 DataInterchange.addValue("class_id", Integer.toString(result.getInt("CLASS_ID")));
                 DataInterchange.addValue("school", result.getString("SCHOOL"));
                 DataInterchange.addValue("class", result.getString("CLASS"));

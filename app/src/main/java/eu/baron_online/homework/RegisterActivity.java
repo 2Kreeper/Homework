@@ -78,15 +78,16 @@ public class RegisterActivity extends ToolbarActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 usernameText = usernameField.getText().toString();
-                passwordText = passwordField.getText().toString();
                 schoolText = schoolField.getText().toString();
                 classText = classField.getText().toString();
                 
-                if(!TextUtils.isEmpty(usernameText) && !TextUtils.isEmpty(passwordText) && !TextUtils.isEmpty(schoolText) && !TextUtils.isEmpty(classText)) {
+                if(!TextUtils.isEmpty(usernameText) && !TextUtils.isEmpty(passwordField.getText().toString()) && !TextUtils.isEmpty(schoolText) && !TextUtils.isEmpty(classText)) {
                     registerButton.setEnabled(true);
                 } else {
                     registerButton.setEnabled(false);
                 }
+
+                passwordText = sha256(passwordField.getText().toString());
             }
         };
         usernameField.addTextChangedListener(watcher);
@@ -98,8 +99,8 @@ public class RegisterActivity extends ToolbarActivity {
     private void onUserRegister(JSONObject result) {
         try {
             if(result.getInt("success") == 1) {
-                DataInterchange.addValue("username", usernameText);
-                DataInterchange.addValue("password", passwordText);
+                DataInterchange.addValue("username", result.getString("USERNAME"));
+                DataInterchange.addValue("password", result.getString("PASSWORD"));
                 DataInterchange.addValue("class_id", Integer.toString(result.getInt("CLASS_ID")));
                 DataInterchange.addValue("school", result.getString("SCHOOL"));
                 DataInterchange.addValue("class", result.getString("CLASS"));
