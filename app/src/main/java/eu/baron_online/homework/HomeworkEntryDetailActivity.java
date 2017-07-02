@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
@@ -83,9 +84,9 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
             //displaying results
             getSupportActionBar().setTitle(result.getString("SUBJECT"));
             media.setText(result.getString("MEDIA"));
-            page.setText("Page(s) " + result.getString("PAGE"));
-            numbers.setText("Number(s) " + result.getString("NUMBERS"));
-            until.setText("Until " + untilStr);
+            page.setText(String.format(getResources().getString(R.string.page_placeholder), result.getString("PAGE")));
+            numbers.setText(String.format(getResources().getString(R.string.numbers_placeholder), result.getString("NUMBERS")));
+            until.setText(String.format(getResources().getString(R.string.until_placeholder), untilStr));
         } catch (JSONException e) {
             e.printStackTrace();
         }

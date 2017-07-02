@@ -44,7 +44,7 @@ public class CreateEntryActivity extends ToolbarActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Create entry");
+        getSupportActionBar().setTitle(getResources().getString(R.string.create_entry));
 
         create = (Button) findViewById(R.id.createEntrySubmit);
         create.setOnClickListener(new View.OnClickListener() {
