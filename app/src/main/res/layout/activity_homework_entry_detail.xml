@@ -17,70 +17,70 @@
         ></include>
 
     <TextView
-        android:text="Number goes here"
+        android:id="@+id/homeworkNumbers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/homeworkPage"
-        android:layout_marginTop="62dp"
-        android:id="@+id/homeworkNumbers"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/homeworkPage"
+        android:layout_marginTop="62dp"
+        android:text="@string/loading"
         android:textAlignment="center"
         android:textSize="24sp" />
 
     <Button
-        android:text="Flag!"
+        android:id="@+id/homeworkFlag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/homeworkFlag"
         android:layout_alignBaseline="@+id/homeworkDone"
         android:layout_alignBottom="@+id/homeworkDone"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:text="@string/flag" />
 
     <TextView
-        android:text="Page goes here"
+        android:id="@+id/homeworkPage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/homeworkPage"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:layout_below="@+id/homeworkMedia"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/homeworkMedia"
         android:layout_marginTop="34dp"
-        android:layout_alignParentEnd="true" />
+        android:text="@string/loading"
+        android:textAlignment="center"
+        android:textSize="24sp" />
 
     <Button
-        android:text="Done!"
+        android:id="@+id/homeworkDone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/homeworkDone"
-        android:layout_marginBottom="63dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/homeworkFlag" />
+        android:layout_marginBottom="63dp"
+        android:layout_toStartOf="@+id/homeworkFlag"
+        android:text="@string/done" />
 
     <TextView
-        android:text="Date goes here"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
         android:id="@+id/homeworkUntil"
-        android:textSize="24sp"
-        android:textAlignment="center"
-        android:layout_below="@+id/homeworkNumbers"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
-
-    <TextView
-        android:text="Media goes here"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/homeworkMedia"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:layout_marginTop="50dp"
-        android:layout_below="@+id/toolbar"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/homeworkNumbers"
+        android:layout_marginTop="36dp"
+        android:text="@string/loading"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/homeworkMedia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="50dp"
+        android:text="@string/loading"
+        android:textAlignment="center"
+        android:textSize="24sp" />
 
 </RelativeLayout>

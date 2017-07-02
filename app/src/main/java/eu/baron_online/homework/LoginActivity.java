@@ -40,7 +40,7 @@ public class LoginActivity extends ToolbarActivity {
         DataInterchange.addValue("emptyToolbar", true);
         //set actionbar
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Login");
+        getSupportActionBar().setTitle(getResources().getString(R.string.login_toolbar));
 
         username = (EditText) findViewById(R.id.loginUsernameInput);
         password = (EditText) findViewById(R.id.loginPasswordInput);

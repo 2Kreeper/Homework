@@ -21,7 +21,7 @@ public class SettingsActivity extends ToolbarActivity {
         DataInterchange.addValue("hideSettings", true);
         //set actionbar
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Settings");
+        getSupportActionBar().setTitle(getResources().getString(R.string.settings_toolbar));
     }
 
 }

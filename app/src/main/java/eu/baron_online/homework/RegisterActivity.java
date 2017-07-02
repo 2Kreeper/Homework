@@ -48,7 +48,7 @@ public class RegisterActivity extends ToolbarActivity {
         DataInterchange.addValue("emptyToolbar", true);
         //set actionbar
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Register");
+        getSupportActionBar().setTitle(getResources().getString(R.string.register_toolbar));
 
         //set variables
         usernameField = (EditText) findViewById(R.id.registerUsername);

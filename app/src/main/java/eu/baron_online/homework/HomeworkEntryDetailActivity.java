@@ -40,6 +40,7 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getResources().getString(R.string.loading));
 
         Intent startIntent = getIntent();
         showID = startIntent.getIntExtra("id", 1);

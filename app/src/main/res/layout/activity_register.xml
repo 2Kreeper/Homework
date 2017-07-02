@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="46dp"
         android:ems="10"
-        android:hint="Username"
+        android:hint="@string/username"
         android:inputType="textPersonName"
         android:layout_below="@+id/toolbar"
         android:layout_alignStart="@+id/registerPassword" />
@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Password"
+        android:hint="@string/password"
         android:inputType="textPassword"
         android:layout_marginTop="47dp"
         android:layout_below="@+id/registerUsername"
@@ -40,19 +40,19 @@
         android:layout_alignEnd="@+id/registerPassword"
         android:layout_centerVertical="true"
         android:ems="10"
-        android:hint="School (FULL name)"
+        android:hint="@string/school"
         android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/registerClass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Class"
-        android:inputType="textPersonName"
-        android:layout_below="@+id/registerSchool"
         android:layout_alignStart="@+id/registerSchool"
-        android:layout_marginTop="47dp" />
+        android:layout_below="@+id/registerSchool"
+        android:layout_marginTop="47dp"
+        android:ems="10"
+        android:hint="@string/class_string"
+        android:inputType="textPersonName" />
 
     <Button
         android:id="@+id/registerButton"
@@ -63,7 +63,7 @@
         android:layout_below="@+id/registerClass"
         android:layout_marginTop="47dp"
         android:enabled="false"
-        android:text="Register!"
+        android:text="@string/register"
         android:textSize="18sp" />
 
 </RelativeLayout>
