@@ -16,37 +16,37 @@
         ></include>
 
     <EditText
+        android:id="@+id/loginPasswordInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:layout_below="@+id/loginUsernameInput"
         android:layout_alignStart="@+id/loginUsernameInput"
+        android:layout_below="@+id/loginUsernameInput"
         android:layout_marginTop="49dp"
-        android:id="@+id/loginPasswordInput"
-        android:hint="@string/login_password" />
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword" />
 
     <Button
-        android:text="@string/login_button"
+        android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="63dp"
-        android:id="@+id/loginButton"
-        android:textSize="18sp"
-        android:layout_below="@+id/loginPasswordInput"
+        android:layout_alignEnd="@+id/loginPasswordInput"
         android:layout_alignStart="@+id/loginPasswordInput"
-        android:layout_alignEnd="@+id/loginPasswordInput" />
+        android:layout_below="@+id/loginPasswordInput"
+        android:layout_marginTop="63dp"
+        android:text="Login!"
+        android:textSize="18sp" />
 
     <EditText
+        android:id="@+id/loginUsernameInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:layout_marginTop="87dp"
-        android:id="@+id/loginUsernameInput"
-        android:hint="@string/login_username"
         android:layout_below="@+id/toolbar"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="87dp"
+        android:ems="10"
+        android:hint="Username"
+        android:inputType="textPersonName" />
 
     <Button
         android:id="@+id/registerButton"

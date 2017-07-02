@@ -72,9 +72,9 @@ public class LoginActivity extends ToolbarActivity {
 
     public void onRequestFinished(JSONObject result) {
         try {
-            boolean userExtists = result.getInt("success") == 1;
+            boolean userExists = result.getInt("success") == 1;
 
-            if(userExtists) {
+            if(userExists) {
                 DataInterchange.addValue("username", username.getText().toString());
                 DataInterchange.addValue("password", password.getText().toString());
                 DataInterchange.addValue("class_id", Integer.toString(result.getInt("CLASS_ID")));

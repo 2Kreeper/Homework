@@ -137,7 +137,7 @@ public class CreateEntryActivity extends ToolbarActivity {
         });
     }
 
-    public void onEntryCreate(JSONObject result) {
+    private void onEntryCreate(JSONObject result) {
         try {
             if(result.getInt("success") == 1) {
                 HomeworkListActivity.instance.updateList();
@@ -160,11 +160,11 @@ public class CreateEntryActivity extends ToolbarActivity {
             List<NameValuePair> jsonParams = new ArrayList<NameValuePair>();
             jsonParams.add(new BasicNameValuePair("user", (String) DataInterchange.getValue("username")));
             jsonParams.add(new BasicNameValuePair("pass", (String) DataInterchange.getValue("password")));
-            jsonParams.add(new BasicNameValuePair("subject", CreateEntryActivity.instance.subjectStr));
-            jsonParams.add(new BasicNameValuePair("media", CreateEntryActivity.instance.mediaStr));
-            jsonParams.add(new BasicNameValuePair("page", CreateEntryActivity.instance.pageStr));
-            jsonParams.add(new BasicNameValuePair("numbers", CreateEntryActivity.instance.numbersStr));
-            jsonParams.add(new BasicNameValuePair("until", CreateEntryActivity.instance.untilStr));
+            jsonParams.add(new BasicNameValuePair("subject", subjectStr));
+            jsonParams.add(new BasicNameValuePair("media", mediaStr));
+            jsonParams.add(new BasicNameValuePair("page", pageStr));
+            jsonParams.add(new BasicNameValuePair("numbers", numbersStr));
+            jsonParams.add(new BasicNameValuePair("until", untilStr));
             jsonParams.add(new BasicNameValuePair("class_id", (String) DataInterchange.getValue("class_id")));
 
             result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_entry_create.php", "GET", jsonParams);
