@@ -1,5 +1,6 @@
 package eu.baron_online.homework;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -102,9 +103,13 @@ public class LoginActivity extends ToolbarActivity {
     class CheckForUser extends AsyncTask<String, String, String> {
 
         private JSONObject result;
+        private ProgressDialog dialog;
 
         @Override
         protected String doInBackground(String... params) {
+            //show loading screen...
+            dialog = ProgressDialog.show(HomeworkEntryDetailActivity.instance, "", "Loading. Please wait...", true);
+
             String username = params[0], password = params[1];
 
             List<NameValuePair> jsonParams = new ArrayList<NameValuePair>();
@@ -117,6 +122,8 @@ public class LoginActivity extends ToolbarActivity {
         }
 
         protected void onPostExecute(String str) {
+            dialog.dismiss();
+
             LoginActivity.instance.onRequestFinished(result);
         }
     }

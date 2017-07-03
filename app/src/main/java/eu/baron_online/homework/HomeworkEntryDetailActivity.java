@@ -1,5 +1,6 @@
 package eu.baron_online.homework;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -135,6 +136,7 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
         private int homeworkID;
         private JSONObject result;
+        private ProgressDialog dialog;
 
         public EntryDone(int homeworkID) {
             this.homeworkID = homeworkID;
@@ -142,6 +144,9 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
         @Override
         protected String doInBackground(String... params) {
+            //show loading screen...
+            dialog = ProgressDialog.show(HomeworkEntryDetailActivity.instance, "", "Loading. Please wait...", true);
+
             List<NameValuePair> jsonParams = new ArrayList<>();
             jsonParams.add(new BasicNameValuePair("user", (String) DataInterchange.getValue("username")));
             jsonParams.add(new BasicNameValuePair("pass", (String) DataInterchange.getValue("password")));
@@ -153,6 +158,7 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
         }
 
         protected void onPostExecute(String str) {
+            dialog.cancel();
             try {
                 if(result.getInt("success") == 1) {
                     HomeworkEntryDetailActivity.instance.onEntryFlagged();
