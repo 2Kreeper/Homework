@@ -1,5 +1,6 @@
 package eu.baron_online.homework;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,11 +20,28 @@ import java.security.NoSuchAlgorithmException;
 
 public class ToolbarActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
+    protected Toolbar toolbar;
+    protected ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //init ProgressDialog
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Loading");
+        progressDialog.setMessage("Loading...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMax(1);
+    }
+
+    protected void setLoading(boolean loading) {
+        if(loading) {
+            progressDialog.show();
+        } else {
+            progressDialog.setProgress(progressDialog.getMax());
+            progressDialog.dismiss();
+        }
     }
 
     @Override

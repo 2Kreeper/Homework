@@ -50,6 +50,7 @@ public class CreateEntryActivity extends ToolbarActivity {
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setLoading(true);
                 new CreateEntry().execute();
             }
         });
@@ -148,7 +149,7 @@ public class CreateEntryActivity extends ToolbarActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        setLoading(false);
     }
 
     class CreateEntry extends AsyncTask<String, String, String> {

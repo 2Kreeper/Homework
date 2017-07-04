@@ -60,6 +60,7 @@ public class RegisterActivity extends ToolbarActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setLoading(true);
                 new RegisterUser().execute();
             }
         });
@@ -114,6 +115,7 @@ public class RegisterActivity extends ToolbarActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        setLoading(false);
     }
 
     private class RegisterUser extends AsyncTask<String, String, String> {

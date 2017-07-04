@@ -52,12 +52,14 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
         numbers = (TextView) findViewById(R.id.homeworkNumbers);
         until = (TextView) findViewById(R.id.homeworkUntil);
 
+        setLoading(true);
         new RequestEntry(showID).execute();
 
         done = (Button) findViewById(R.id.homeworkDone);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setLoading(true);
                 new EntryDone(showID).execute();
             }
         });
@@ -91,9 +93,12 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        setLoading(false);
     }
 
     public void onEntryFlagged() {
+        setLoading(false);
+
         finish();
         HomeworkListActivity.instance.updateList();
     }
@@ -104,6 +109,8 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
+
+        setLoading(false);
     }
 
     class RequestEntry extends AsyncTask<String, String, String> {
@@ -136,7 +143,6 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
         private int homeworkID;
         private JSONObject result;
-        private ProgressDialog dialog;
 
         public EntryDone(int homeworkID) {
             this.homeworkID = homeworkID;
@@ -144,9 +150,6 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            //show loading screen...
-            dialog = ProgressDialog.show(HomeworkEntryDetailActivity.instance, "", "Loading. Please wait...", true);
-
             List<NameValuePair> jsonParams = new ArrayList<>();
             jsonParams.add(new BasicNameValuePair("user", (String) DataInterchange.getValue("username")));
             jsonParams.add(new BasicNameValuePair("pass", (String) DataInterchange.getValue("password")));
@@ -158,7 +161,6 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
         }
 
         protected void onPostExecute(String str) {
-            dialog.cancel();
             try {
                 if(result.getInt("success") == 1) {
                     HomeworkEntryDetailActivity.instance.onEntryFlagged();

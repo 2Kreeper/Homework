@@ -36,7 +36,7 @@ public class LoginActivity extends ToolbarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         //mark actionbar to be empty
         DataInterchange.addValue("emptyToolbar", true);
         //set actionbar
@@ -58,6 +58,7 @@ public class LoginActivity extends ToolbarActivity {
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                 } else {
+                    setLoading(true);
                     new CheckForUser().execute(username.getText().toString(), sha256(password.getText().toString()));
                 }
             }
@@ -69,13 +70,15 @@ public class LoginActivity extends ToolbarActivity {
                 startActivity(new Intent(LoginActivity.instance, RegisterActivity.class));
             }
         });
+
+
     }
 
     public void onRequestFinished(JSONObject result) {
         try {
             boolean userExists = result.getInt("success") == 1;
 
-            if(userExists) {
+            if (userExists) {
                 DataInterchange.addValue("username", result.getString("USERNAME"));
                 DataInterchange.addValue("password", result.getString("PASSWORD"));
                 DataInterchange.addValue("class_id", Integer.toString(result.getInt("CLASS_ID")));
@@ -98,17 +101,16 @@ public class LoginActivity extends ToolbarActivity {
         } catch (JSONException e) {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
+
+        setLoading(false);
     }
 
     class CheckForUser extends AsyncTask<String, String, String> {
 
         private JSONObject result;
-        private ProgressDialog dialog;
 
         @Override
         protected String doInBackground(String... params) {
-            //show loading screen...
-            dialog = ProgressDialog.show(HomeworkEntryDetailActivity.instance, "", "Loading. Please wait...", true);
 
             String username = params[0], password = params[1];
 
@@ -122,8 +124,6 @@ public class LoginActivity extends ToolbarActivity {
         }
 
         protected void onPostExecute(String str) {
-            dialog.dismiss();
-
             LoginActivity.instance.onRequestFinished(result);
         }
     }
