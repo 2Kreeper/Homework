@@ -1,9 +1,15 @@
 package eu.baron_online.homework;
 
+import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
@@ -16,6 +22,10 @@ import org.apache.commons.codec.binary.Hex;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
 
 
 public class ToolbarActivity extends AppCompatActivity {
@@ -44,6 +54,40 @@ public class ToolbarActivity extends AppCompatActivity {
         }
     }
 
+    protected void sendNotification(String title, String text, Object targetActivity, HashMap<String, Integer> extras, int icon, int mId) {
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+        mBuilder.setSmallIcon(icon);
+        mBuilder.setContentTitle(title);
+        mBuilder.setContentText(text);
+
+        Intent resultIntent = new Intent(this, targetActivity);
+        Iterator it = extras.entrySet().iterator();
+        while(it.hasNext()) {
+            Map.Entry e = (Map.Entry) it.next();
+            resultIntent.putExtra((String) e.getKey(), (String) e.getValue());
+        }
+
+        // The stack builder object will contain an artificial back stack for the
+        // started Activity.
+        // This ensures that navigating backward from the Activity leads out of
+        // your application to the Home screen.
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        // Adds the back stack for the Intent (but not the Intent itself)
+        stackBuilder.addParentStack((Activity) targetActivity);
+        // Adds the Intent that starts the Activity to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        // mId allows you to update the notification later on.
+        mNotificationManager.notify(mId, mBuilder.build());
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if(DataInterchange.containsKey("hideSettings") && (Boolean) DataInterchange.getValue("hideSettings")) {
@@ -54,8 +98,7 @@ public class ToolbarActivity extends AppCompatActivity {
             getMenuInflater().inflate(R.menu.menu_main, menu);
         }
 
-
-        //reset falgs
+        //reset flags
         DataInterchange.addValue("hideSettings", false);
         DataInterchange.addValue("emptyToolbar", false);
 
