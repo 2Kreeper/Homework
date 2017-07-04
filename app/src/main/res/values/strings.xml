@@ -35,5 +35,6 @@
     <string name="settings">Settings</string>
     <string name="logout">Log Out</string>
     <string name="create_entry">Create Entry</string>
+    <string name="loading_title">Loading</string>
 
 </resources>

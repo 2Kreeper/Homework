@@ -29,8 +29,8 @@ public class ToolbarActivity extends AppCompatActivity {
 
         //init ProgressDialog
         progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Loading");
-        progressDialog.setMessage("Loading...");
+        progressDialog.setTitle(getResources().getString(R.string.loading_title));
+        progressDialog.setMessage(getResources().getString(R.string.loading));
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setMax(1);
     }

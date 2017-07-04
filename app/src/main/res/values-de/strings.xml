@@ -25,4 +25,5 @@
     <string name="numbers_placeholder">Nummer(n) <xliff:g>%1$s</xliff:g></string>
     <string name="page_placeholder">Seite(n) <xliff:g>%1$s</xliff:g></string>
     <string name="until_placeholder">Bis <xliff:g>%1$s</xliff:g></string>
+    <string name="loading_title">Lade</string>
 </resources>
