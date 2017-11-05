@@ -1,10 +1,8 @@
 package eu.baron_online.homework;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -17,13 +15,11 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.StringTokenizer;
 
 public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
@@ -43,6 +39,9 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.loading));
+        //remove unwanted options
+        int[] ignoreArray = {R.id.action_search};
+        DataInterchange.addValue("actionbar_ignore", ignoreArray);
 
         Intent startIntent = getIntent();
         showID = startIntent.getIntExtra("id", 1);
@@ -60,7 +59,7 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
             @Override
             public void onClick(View v) {
                 setLoading(true);
-                new EntryDone(showID).execute();
+                new MarkEntryDone(showID).execute();
             }
         });
 
@@ -75,14 +74,19 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
     public void setEntry(JSONObject result) {
         try {
-            //formatting date to user-friendly format
-            String untilStr = result.getString("UNTIL");
-            String yearStr = untilStr.substring(0, 4);
-            String monthStr = untilStr.substring(5, 7);
-            String dayStr = untilStr.substring(8);
+            /*if(result.getInt("success") == 0) {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_not_logged_in), Toast.LENGTH_SHORT);
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+            }*/
 
-            Date d = new Date(new GregorianCalendar(Integer.parseInt(yearStr), Integer.parseInt(monthStr), Integer.parseInt(dayStr)).getTimeInMillis());
-            untilStr = android.text.format.DateFormat.format("dd.MM.yyyy", d).toString();
+            String untilStr = result.getString("UNTIL");
+
+            SimpleDateFormat serverFmt = new SimpleDateFormat(getResources().getString(R.string.server_date_format));
+            Date date = serverFmt.parse(untilStr);
+
+            SimpleDateFormat userFmt = new SimpleDateFormat(getResources().getString(R.string.local_date_format));
+            untilStr = userFmt.format(date);
 
             //displaying results
             getSupportActionBar().setTitle(result.getString("SUBJECT"));
@@ -90,13 +94,17 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
             page.setText(String.format(getResources().getString(R.string.page_placeholder), result.getString("PAGE")));
             numbers.setText(String.format(getResources().getString(R.string.numbers_placeholder), result.getString("NUMBERS")));
             until.setText(String.format(getResources().getString(R.string.until_placeholder), untilStr));
+
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         setLoading(false);
     }
 
     public void onEntryFlagged() {
+        //TODO Implement flagging system!
         setLoading(false);
 
         finish();
@@ -139,12 +147,12 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
         }
     }
 
-    class EntryDone extends AsyncTask<String, String, String> {
+    class MarkEntryDone extends AsyncTask<String, String, String> {
 
         private int homeworkID;
         private JSONObject result;
 
-        public EntryDone(int homeworkID) {
+        public MarkEntryDone(int homeworkID) {
             this.homeworkID = homeworkID;
         }
 

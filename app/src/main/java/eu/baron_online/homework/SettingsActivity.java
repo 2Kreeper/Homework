@@ -1,12 +1,8 @@
 package eu.baron_online.homework;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.Button;
-
-import java.util.HashMap;
+import android.widget.SeekBar;
 
 public class SettingsActivity extends ToolbarActivity {
 
@@ -19,22 +15,45 @@ public class SettingsActivity extends ToolbarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //mark to load "menu_main_no_settings"
-        DataInterchange.addValue("hideSettings", true);
         //set actionbar
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.settings_toolbar));
+        //remove unwanted options
+        int[] ignoreArray = {R.id.action_search, R.id.action_settings};
+        DataInterchange.addValue("actionbar_ignore", ignoreArray);
 
-        Button button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+        updateViews();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        updateViews();
+    }
+
+    private void updateViews() {
+        SeekBar refreshRateSeekBar = (SeekBar) findViewById(R.id.refreshRateSeekBar);
+        if(DataInterchange.getPersistentInt("homeworkCheckerSleepTime") != 0) {
+            refreshRateSeekBar.setProgress(DataInterchange.getPersistentInt("homeworkCheckerSleepTime") / 1000 - 1); //undo multiplication while saving to display user-friendly value
+        }
+        refreshRateSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onClick(View v) {
-                HashMap<String, Integer> extras = new HashMap<>();
-                extras.put("id", 1);
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                DataInterchange.addPersistent("homeworkCheckerSleepTime",
+                        (1000 * (progress + 1)) //multiplying by 1000 to get a useful sleep time. Plus one because sleep time zero (1000 * 0) is WAY to high
+                );
+            }
 
-                sendNotification("Test", "This is a test.\nIf you click here, you will see the entry with ID 1", HomeworkEntryDetailActivity.class, extras, R.drawable.ic_stat_name, 0);
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
     }

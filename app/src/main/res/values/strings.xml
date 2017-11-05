@@ -16,19 +16,16 @@
 
     <string name="loading">Loading...</string>
 
-    <!-- Buttons -->
     <string name="create">Create!</string>
     <string name="done">Done!</string>
     <string name="flag">Flag!</string>
     <string name="login">Login!</string>
     <string name="register">Register!</string>
 
-    <!-- Entry detail view -->
-    <string name="page_placeholder">Page(s) <xliff:g>%1$s</xliff:g></string>
-    <string name="numbers_placeholder">Number(s) <xliff:g>%1$s</xliff:g></string>
-    <string name="until_placeholder">Until <xliff:g>%1$s</xliff:g></string>
+    <string name="page_placeholder">Page(s) %1$s</string>
+    <string name="numbers_placeholder">Number(s) %1$s</string>
+    <string name="until_placeholder">Until %1$s</string>
 
-    <!-- Toolbar titles -->
     <string name="settings_toolbar">Settings</string>
     <string name="register_toolbar">Register</string>
     <string name="login_toolbar">Login</string>
@@ -36,5 +33,29 @@
     <string name="logout">Log Out</string>
     <string name="create_entry">Create Entry</string>
     <string name="loading_title">Loading</string>
+    <string name="new_homework_title">New homework!</string>
+    <string name="new_homework_text">New homework in %1$s until %2$s</string>
+    <string name="local_date_format">MM.dd.yyyy</string>
+    <string name="server_date_format" translatable="false">yyyy-MM-dd</string>
+    <string name="date_desc">Date - descending</string>
+    <string name="date_asc">Date - ascending</string>
+    <string name="subject_asc">Subject - ascending</string>
+    <string name="subject_desc">Subject - descending</string>
+    <string name="search">Search</string>
+    <string name="filter_subject_selection">Subject?</string>
+    <string name="filter_subject_all">All</string>
+    <string name="date">Date</string>
+    <string name="filter_date_from">From</string>
+    <string name="filter_date_until">Until</string>
+    <string name="register_class">Register by class</string>
+    <string name="register_course">Register by courses</string>
+    <string name="_continue">Continue</string>
+    <string name="addCourse">Add a course</string>
+    <string name="course">Course</string>
+    <string name="teacher">Teacher</string>
+    <string name="notification_new_homework_title">New homework in %1$s</string>
+    <string name="notification_new_homework_text">Page(s) %2$s in the %1$s until %3$s</string>
+
+    <string name="error_not_logged_in">You are not logged in!</string>
 
 </resources>

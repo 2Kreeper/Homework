@@ -23,9 +23,9 @@ import android.util.Log;
 
 public class JSONParser {
 
-    static InputStream is = null;
-    static JSONObject jObj = null;
-    static String json = "";
+    private static InputStream is = null;
+    private static JSONObject jObj = null;
+    private static String json = "";
 
     // constructor
     public JSONParser() {
@@ -59,6 +59,8 @@ public class JSONParser {
                 url += "?" + paramString;
                 HttpGet httpGet = new HttpGet(url);
 
+                Log.v("baron-online.eu", "HttpRequest url: " + url);
+
                 HttpResponse httpResponse = httpClient.execute(httpGet);
                 HttpEntity httpEntity = httpResponse.getEntity();
                 is = httpEntity.getContent();
@@ -82,6 +84,7 @@ public class JSONParser {
             }
             is.close();
             json = sb.toString();
+            Log.v("baron-online.eu", "HttpRequest result: " + json);
         } catch (Exception e) {
             Log.e("Buffer Error", "Error converting result " + e.toString());
         }

@@ -1,6 +1,7 @@
 package eu.baron_online.homework;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -21,6 +23,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -45,6 +49,9 @@ public class CreateEntryActivity extends ToolbarActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.create_entry));
+        //remove unwanted options
+        int[] ignoreArray = {R.id.action_search};
+        DataInterchange.addValue("actionbar_ignore", ignoreArray);
 
         create = (Button) findViewById(R.id.createEntrySubmit);
         create.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +116,9 @@ public class CreateEntryActivity extends ToolbarActivity {
                     int month = Integer.parseInt(DateFormat.format("MM", time).toString());
                     int day = Integer.parseInt(DateFormat.format("dd", time).toString());
 
-                    DatePickerDialog dialog = new DatePickerDialog(CreateEntryActivity.instance, new DatePickerDialog.OnDateSetListener() {
+                    Log.v("baron-online.eu", year + "-" + month + "-" + day);
+
+                    /*DatePickerDialog dialog = new DatePickerDialog(CreateEntryActivity.this, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker picker, int year, int month, int dayOfMonth) {
                             String yearStr = String.valueOf(year);
@@ -129,10 +138,44 @@ public class CreateEntryActivity extends ToolbarActivity {
                             //manually call TextChangeEvent
                             watcher.afterTextChanged(new SpannableStringBuilder());
                         }
-                    }, year, month, day);
-                    dialog.show();
-                } else {
+                    }, year, month, day);*/
+                    DatePickerDialog dialog = new DatePickerDialog(CreateEntryActivity.this, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker picker, int yearSelected, int monthSelected, int dayOfMonthSelected) {
+                            try {
+                                String yearStr = String.valueOf(yearSelected);
+                                String monthStr = String.valueOf(monthSelected);
+                                String dayStr = String.valueOf(dayOfMonthSelected);
 
+
+                                String untilString = yearStr + "-" + monthStr + "-" + dayStr;
+                                Log.v("baron-online.eu", untilString);
+                                SimpleDateFormat serverFmt = new SimpleDateFormat(getResources().getString(R.string.server_date_format));
+                                Date date = serverFmt.parse(untilString);
+
+                                SimpleDateFormat userFmt = new SimpleDateFormat(getResources().getString(R.string.local_date_format));
+                                untilString = userFmt.format(date);
+
+                                until.setText(untilString);
+                                until.clearFocus();
+
+                                //manually call TextChangeEvent
+                                watcher.afterTextChanged(new SpannableStringBuilder());
+                            } catch(ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, year, month - 1, day);
+                    dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (which == DialogInterface.BUTTON_NEGATIVE) {
+                                until.clearFocus();
+
+                            }
+                        }
+                    });
+                    dialog.show();
                 }
             }
         });

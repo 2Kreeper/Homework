@@ -16,6 +16,18 @@
         ></include>
 
     <EditText
+        android:id="@+id/loginUsernameInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="87dp"
+        android:ems="10"
+        android:hint="@string/username"
+        android:inputType="textPersonName"
+        android:text="2Kreeper" />
+
+    <EditText
         android:id="@+id/loginPasswordInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,7 +36,8 @@
         android:layout_marginTop="49dp"
         android:ems="10"
         android:hint="@string/password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:text="password" />
 
     <Button
         android:id="@+id/loginButton"
@@ -37,17 +50,6 @@
         android:text="@string/login"
         android:textSize="18sp" />
 
-    <EditText
-        android:id="@+id/loginUsernameInput"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="87dp"
-        android:ems="10"
-        android:hint="@string/username"
-        android:inputType="textPersonName" />
-
     <Button
         android:id="@+id/registerButton"
         android:layout_width="wrap_content"
@@ -56,6 +58,16 @@
         android:layout_alignStart="@+id/loginButton"
         android:layout_below="@+id/loginButton"
         android:text="@string/register"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/registerButton"
+        android:layout_alignStart="@+id/registerButton"
+        android:layout_below="@+id/registerButton"
+        android:text="Cause NPE"
         android:textSize="18sp" />
 
 </RelativeLayout>

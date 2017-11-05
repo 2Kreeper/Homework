@@ -1,41 +1,46 @@
 package eu.baron_online.homework;
 
-import android.app.Activity;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.service.notification.StatusBarNotification;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
-
-import org.apache.commons.codec.binary.Hex;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.IntStream;
 
 
 public class ToolbarActivity extends AppCompatActivity {
 
+    public static ToolbarActivity instance;
+
     protected Toolbar toolbar;
     protected ProgressDialog progressDialog;
+    protected NotificationManager mNotificationManager;
+
+    private int[] menuIgnoreArray = {};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        instance = this;
+
+        mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         //init ProgressDialog
         progressDialog = new ProgressDialog(this);
@@ -43,6 +48,12 @@ public class ToolbarActivity extends AppCompatActivity {
         progressDialog.setMessage(getResources().getString(R.string.loading));
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setMax(1);
+
+        if(DataInterchange.getValue("username") == null && DataInterchange.existsPersistent("username")) {
+            //user is not logged in and login data is saved
+            DataInterchange.addValue("username", DataInterchange.getPersistentString("username"));
+            DataInterchange.addValue("password", DataInterchange.getPersistentString("password"));
+        }
     }
 
     protected void setLoading(boolean loading) {
@@ -54,62 +65,52 @@ public class ToolbarActivity extends AppCompatActivity {
         }
     }
 
-    protected void sendNotification(String title, String text, Object targetActivity, HashMap<String, Integer> extras, int icon, int mId) {
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
-        mBuilder.setSmallIcon(icon);
-        mBuilder.setContentTitle(title);
-        mBuilder.setContentText(text);
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
-        Intent resultIntent = new Intent(this, targetActivity);
-        Iterator it = extras.entrySet().iterator();
-        while(it.hasNext()) {
-            Map.Entry e = (Map.Entry) it.next();
-            resultIntent.putExtra((String) e.getKey(), (String) e.getValue());
-        }
-
-        // The stack builder object will contain an artificial back stack for the
-        // started Activity.
-        // This ensures that navigating backward from the Activity leads out of
-        // your application to the Home screen.
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        // Adds the back stack for the Intent (but not the Intent itself)
-        stackBuilder.addParentStack((Activity) targetActivity);
-        // Adds the Intent that starts the Activity to the top of the stack
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent =
-                stackBuilder.getPendingIntent(
-                        0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-        mBuilder.setContentIntent(resultPendingIntent);
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        // mId allows you to update the notification later on.
-        mNotificationManager.notify(mId, mBuilder.build());
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(DataInterchange.containsKey("hideSettings") && (Boolean) DataInterchange.getValue("hideSettings")) {
-            getMenuInflater().inflate(R.menu.menu_main_no_settings, menu);
-        } else if(DataInterchange.containsKey("emptyToolbar") && (Boolean) DataInterchange.getValue("emptyToolbar")) {
-            getMenuInflater().inflate(R.menu.menu_empty, menu);
-        } else {
-            getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        if(DataInterchange.getValue("actionbar_ignore") != null) {
+            menuIgnoreArray = (int[]) DataInterchange.getValue("actionbar_ignore");
+
+            for(int i : menuIgnoreArray) {
+                menu.findItem(i).setVisible(false);
+            }
+            menu.findItem(R.id.action_settings).setVisible(false);
         }
 
-        //reset flags
-        DataInterchange.addValue("hideSettings", false);
-        DataInterchange.addValue("emptyToolbar", false);
+        DataInterchange.removeValue("actionbar_ignore");
+
+        if(DataInterchange.getValue("actionbar_options_visible") != null) {
+            boolean optionsVisible = (boolean) DataInterchange.getValue("actionbar_options_visible");
+
+            for(int i = 0; i < menu.size(); i++) {
+                if(optionsVisible) {
+                    if(!Arrays.asList(menuIgnoreArray).contains(i)) { //only make option visible if it is NOT marked as ignored (if ignored it has to be invisible all the time)
+                        menu.getItem(i).setVisible(true);
+                    }
+                } else {
+                    menu.getItem(i).setVisible(false);
+                }
+            }
+        }
+
+        DataInterchange.removeValue("actionbar_options_visible");
 
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         switch(id) {
@@ -118,6 +119,9 @@ public class ToolbarActivity extends AppCompatActivity {
                 break;
 
             case R.id.action_logout:
+                DataInterchange.removePersisten("username");
+                DataInterchange.removePersisten("password");
+
                 startActivity(new Intent(this, LoginActivity.class));
                 finish();
                 break;
@@ -134,18 +138,34 @@ public class ToolbarActivity extends AppCompatActivity {
 
             String sha256text = Base64.encodeToString(hash, Base64.DEFAULT);
 
-            Log.v("baron-online.eu", "sha256-result: " + sha256text);
-
             return sha256text;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
 
-        Toast.makeText(getApplicationContext(), "Unabled to hash '" + text + "'!", Toast.LENGTH_SHORT);
+        Toast.makeText(getApplicationContext(), "Unable to hash '" + text + "'!", Toast.LENGTH_SHORT);
         return null;
     }
 
-    protected void setToolbarTitle(CharSequence title) {
-        getSupportActionBar().setTitle(title);
+    protected int[] arrayListToArray(ArrayList<Integer> arrayList) {
+        int[] result = new int[arrayList.size()];
+
+        for(int i = 0; i < arrayList.size(); i++) {
+            result[i] = arrayList.get(i);
+        }
+
+        return result;
+    }
+
+    protected boolean notificationExists(int id) {
+        StatusBarNotification[] notifications = mNotificationManager.getActiveNotifications();
+
+        for(StatusBarNotification notification : notifications) {
+            if(notification.getId() == id) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

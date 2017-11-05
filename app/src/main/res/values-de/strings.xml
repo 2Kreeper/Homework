@@ -22,8 +22,24 @@
     <string name="login">Einloggen!</string>
     <string name="login_toolbar">Login</string>
     <string name="numbers">Nummer(n)</string>
-    <string name="numbers_placeholder">Nummer(n) <xliff:g>%1$s</xliff:g></string>
-    <string name="page_placeholder">Seite(n) <xliff:g>%1$s</xliff:g></string>
-    <string name="until_placeholder">Bis <xliff:g>%1$s</xliff:g></string>
+    <string name="numbers_placeholder">Nummer(n) %1$s</string>
+    <string name="page_placeholder">Seite(n) %1$s</string>
+    <string name="until_placeholder">Bis %1$s</string>
     <string name="loading_title">Lade</string>
+    <string name="new_homework_title">Neue Hausaufgabe!</string>
+    <string name="new_homework_text">Neue Hausaufgabe in %1$s bis zum %2$s</string>
+    <string name="local_date_format">dd.MM.yyyy</string>
+    <string name="date_asc">Datum - aufsteigend</string>
+    <string name="date_desc">Datum - absteigend</string>
+    <string name="subject_asc">Fach - aufsteigend</string>
+    <string name="subject_desc">Fach - absteigend</string>
+    <string name="search">Suche</string>
+    <string name="filter_subject_selection">Fach?</string>
+    <string name="filter_subject_all">Alle</string>
+    <string name="date">Datum</string>
+    <string name="filter_date_from">Von</string>
+    <string name="filter_date_until">Bis</string>
+    <string name="error_not_logged_in">Nicht eingeloggt!</string>
+    <string name="notification_new_homework_title">Nee Hausaufgabe in %1$s</string>
+    <string name="notification_new_homework_text">Seite(n) %2$s im %1$s bis zum %3$s</string>
 </resources>

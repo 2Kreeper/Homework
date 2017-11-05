@@ -11,18 +11,49 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity">
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HomeworkListActivity" />
-        <activity android:name=".HomeworkEntryDetailActivity" />
-        <activity android:name=".CreateEntryActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".RegisterActivity"></activity>
+        <activity
+            android:name=".HomeworkListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".HomeworkEntryDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CreateEntryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SettingsActivity"
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name=".BackgroundHomeworkChecker"
+            android:exported="false" />
+
+        <service
+            android:name=".fcm.FCMManager">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".fcm.FCMReciever">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <receiver android:name=".NotificationDeleteReceiver" />
+
+        <activity android:name=".RegisterActivity1" />
+        <activity android:name=".RegisterActivity2"></activity>
     </application>
 
 </manifest>
