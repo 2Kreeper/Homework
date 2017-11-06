@@ -2,6 +2,7 @@ package eu.baron_online.homework;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -216,26 +217,6 @@ public class HomeworkListActivity extends ToolbarActivity {
         updateList();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch(id) {
-            case R.id.action_search:
-                View searchContainer = actionbarView.findViewById(R.id.toolbar_search_container);
-
-                //clear menu items
-                DataInterchange.addValue("actionbar_options_visible", false);
-                invalidateOptionsMenu();
-
-                searchContainer.setVisibility(View.VISIBLE);
-
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     private void showFilterSubjectPopup() {
         this.setLoading(true);
         //make an http request, popup is displayed in result handling (setSubjects(JSONObject result))
@@ -248,7 +229,10 @@ public class HomeworkListActivity extends ToolbarActivity {
         View view = inflater.inflate(R.layout.dialog_filter_date, null);
 
         final EditText from = (EditText) view.findViewById(R.id.filter_date_from);
+        final EditText until = (EditText) view.findViewById(R.id.filter_date_until);
+
         from.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            private DatePickerDialog dialog;
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus) {
@@ -257,7 +241,7 @@ public class HomeworkListActivity extends ToolbarActivity {
                     int month = Integer.parseInt(DateFormat.format("MM", time).toString());
                     int day = Integer.parseInt(DateFormat.format("dd", time).toString());
 
-                    DatePickerDialog dialog = new DatePickerDialog(HomeworkListActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    dialog = new DatePickerDialog(HomeworkListActivity.this, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker picker, int year, int month, int dayOfMonth) {
                             String yearStr = String.valueOf(year);
@@ -272,14 +256,17 @@ public class HomeworkListActivity extends ToolbarActivity {
                             }
 
                             from.setText(yearStr + "-" + monthStr + "-" + dayStr);
-                            from.clearFocus();
+
+                            //clear focus
+                            from.setFocusable(false);
+                            from.setFocusable(true);
                         }
                     }, year, month, day);
                     dialog.show();
                 }
             }
         });
-        final EditText until = (EditText) view.findViewById(R.id.filter_date_until);
+
         until.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -304,7 +291,9 @@ public class HomeworkListActivity extends ToolbarActivity {
                             }
 
                             until.setText(yearStr + "-" + monthStr + "-" + dayStr);
-                            until.clearFocus();
+
+                            //set focus on finish button
+                            d.getButton(AlertDialog.BUTTON_POSITIVE).requestFocus();
                         }
                     }, year, month, day);
                     dialog.show();

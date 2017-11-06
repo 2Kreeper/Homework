@@ -84,14 +84,6 @@ public class LoginActivity extends ToolbarActivity {
                 startActivity(new Intent(LoginActivity.instance, RegisterActivity1.class));
             }
         });
-
-        findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Button b = null;
-                b.getAlpha();
-            }
-        });
     }
 
     public void onRequestFinished(JSONObject result) {
