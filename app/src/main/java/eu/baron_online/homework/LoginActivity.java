@@ -20,6 +20,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,6 +126,15 @@ public class LoginActivity extends ToolbarActivity {
             }
         } catch (JSONException e) {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+        } catch (NullPointerException e) {
+            //show toast in UI thread
+            ToolbarActivity.instance.runOnUiThread(new Runnable(){
+                @Override
+                public void run(){
+                    Toast.makeText(ToolbarActivity.instance, ToolbarActivity.instance.getResources().getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
+                }
+            });
+            e.printStackTrace();
         }
 
         setLoading(false);
@@ -148,6 +158,7 @@ public class LoginActivity extends ToolbarActivity {
             return "";
         }
 
+        @Override
         protected void onPostExecute(String str) {
             LoginActivity.instance.onRequestFinished(result);
         }

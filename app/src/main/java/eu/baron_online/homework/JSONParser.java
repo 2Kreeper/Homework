@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
+import android.widget.Toast;
 
 public class JSONParser {
 
@@ -71,6 +72,13 @@ public class JSONParser {
         } catch (ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            //show toast in UI thread
+            ToolbarActivity.instance.runOnUiThread(new Runnable(){
+                @Override
+                public void run(){
+                    Toast.makeText(ToolbarActivity.instance, ToolbarActivity.instance.getResources().getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
+                }
+            });
             e.printStackTrace();
         }
 

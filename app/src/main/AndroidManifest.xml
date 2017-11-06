@@ -34,10 +34,6 @@
             android:screenOrientation="portrait" />
 
         <service
-            android:name=".BackgroundHomeworkChecker"
-            android:exported="false" />
-
-        <service
             android:name=".fcm.FCMManager">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
@@ -49,8 +45,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
-
-        <receiver android:name=".NotificationDeleteReceiver" />
 
         <activity android:name=".RegisterActivity1" />
         <activity android:name=".RegisterActivity2"></activity>

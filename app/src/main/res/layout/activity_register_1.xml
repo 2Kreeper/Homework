@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="eu.baron_online.homework.RegisterActivity1">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        ></include>
+
+    <EditText
+        android:id="@+id/registerUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="47dp"
+        android:ems="10"
+        android:hint="@string/username"
+        android:inputType="textPersonName"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignStart="@+id/registerPassword" />
+
+    <EditText
+        android:id="@+id/registerPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:layout_marginTop="47dp"
+        android:layout_below="@+id/registerUsername"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/registerSchool"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/school"
+        android:inputType="textPersonName"
+        android:layout_below="@+id/registerPassword"
+        android:layout_alignStart="@+id/registerPassword"
+        android:layout_marginTop="47dp" />
+
+    <EditText
+        android:id="@+id/registerClass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/registerSchool"
+        android:layout_below="@+id/registerSchool"
+        android:layout_marginTop="47dp"
+        android:ems="10"
+        android:hint="@string/class_string"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/continueRegisterButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/registerClass"
+        android:layout_alignStart="@+id/registerClass"
+        android:layout_below="@+id/registerClass"
+        android:layout_marginTop="47dp"
+        android:enabled="false"
+        android:text="@string/_continue"
+        android:textSize="18sp" />
+
+</RelativeLayout>

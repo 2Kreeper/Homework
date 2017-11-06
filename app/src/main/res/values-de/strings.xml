@@ -40,6 +40,7 @@
     <string name="filter_date_from">Von</string>
     <string name="filter_date_until">Bis</string>
     <string name="error_not_logged_in">Nicht eingeloggt!</string>
-    <string name="notification_new_homework_title">Nee Hausaufgabe in %1$s</string>
+    <string name="error_no_internet">Nicht mit dem Internet verbunden!\nBitte aktiviere WLAN oder mobile Daten</string>
+    <string name="notification_new_homework_title">Neue Hausaufgabe in %1$s</string>
     <string name="notification_new_homework_text">Seite(n) %2$s im %1$s bis zum %3$s</string>
 </resources>

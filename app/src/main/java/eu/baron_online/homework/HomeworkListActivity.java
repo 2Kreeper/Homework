@@ -35,6 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -227,10 +228,6 @@ public class HomeworkListActivity extends ToolbarActivity {
             Log.v("baron-online.eu", "Adding value for \"sort_mode\"");
             DataInterchange.addPersistent("sort_mode", "ASC");
         }
-
-        //start background service
-        Intent backgroundIntent = new Intent(this, BackgroundHomeworkChecker.class);
-        startService(backgroundIntent);
     }
 
     @Override
@@ -389,10 +386,18 @@ public class HomeworkListActivity extends ToolbarActivity {
         } catch (JSONException e) {
             Toast.makeText(getApplicationContext(), "A JSONError occurred! Please contact the developer.", Toast.LENGTH_LONG).show();
             e.printStackTrace();
+        } catch (NullPointerException e) {
+            //show toast in UI thread
+            ToolbarActivity.instance.runOnUiThread(new Runnable(){
+                @Override
+                public void run(){
+                    Toast.makeText(ToolbarActivity.instance, ToolbarActivity.instance.getResources().getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
+                }
+            });
+            e.printStackTrace();
         }
 
         swipeRefreshLayout.setRefreshing(false);
-        BackgroundHomeworkChecker.instance.homeworkListActivityInited = true;
     }
 
     public void setSubjects(JSONObject result) {
@@ -433,6 +438,15 @@ public class HomeworkListActivity extends ToolbarActivity {
                 }
             }).create().show();
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            //show toast in UI thread
+            ToolbarActivity.instance.runOnUiThread(new Runnable(){
+                @Override
+                public void run(){
+                    Toast.makeText(ToolbarActivity.instance, ToolbarActivity.instance.getResources().getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
+                }
+            });
             e.printStackTrace();
         }
 

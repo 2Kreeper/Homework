@@ -15,6 +15,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,6 +68,7 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
         flag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO Implement flagging system
                 Toast.makeText(getApplicationContext(), "This is not implemented yet!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -99,18 +101,26 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
+        } catch (NullPointerException e) {
+            //show toast in UI thread
+            ToolbarActivity.instance.runOnUiThread(new Runnable(){
+                @Override
+                public void run(){
+                    Toast.makeText(ToolbarActivity.instance, ToolbarActivity.instance.getResources().getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
+                }
+            });
+            e.printStackTrace();
         }
         setLoading(false);
     }
 
-    public void onEntryFlagged() {
-        //TODO Implement flagging system!
+    public void onEntryMarked() {
         setLoading(false);
 
         finish();
         HomeworkListActivity.instance.updateList();
     }
-    public void onEntryFlagFailed() {
+    public void onEntryMarkFailed() {
         Context context = getApplicationContext();
         CharSequence text = "An error occured!";
         int duration = Toast.LENGTH_SHORT;
@@ -171,12 +181,12 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
         protected void onPostExecute(String str) {
             try {
                 if(result.getInt("success") == 1) {
-                    HomeworkEntryDetailActivity.instance.onEntryFlagged();
+                    HomeworkEntryDetailActivity.instance.onEntryMarked();
                 } else {
-                    HomeworkEntryDetailActivity.instance.onEntryFlagFailed();
+                    HomeworkEntryDetailActivity.instance.onEntryMarkFailed();
                 }
             } catch (JSONException e) {
-                HomeworkEntryDetailActivity.instance.onEntryFlagFailed();
+                HomeworkEntryDetailActivity.instance.onEntryMarkFailed();
                 e.printStackTrace();
             }
         }

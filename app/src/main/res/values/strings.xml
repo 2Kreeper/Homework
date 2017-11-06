@@ -57,5 +57,6 @@
     <string name="notification_new_homework_text">Page(s) %2$s in the %1$s until %3$s</string>
 
     <string name="error_not_logged_in">You are not logged in!</string>
+    <string name="error_no_internet">You are not connected to the internet!\nPlease enable Wifi or mobile data</string>
 
 </resources>

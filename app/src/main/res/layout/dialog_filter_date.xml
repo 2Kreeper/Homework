@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/filter_date_from"
+        android:layout_marginStart="15dp"
+        android:textSize="24sp"
+        android:layout_alignBaseline="@+id/filter_date_from"
+        android:layout_alignBottom="@+id/filter_date_from"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:id="@+id/filter_date_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_toEndOf="@+id/textView4"
+        android:ems="10"
+        android:inputType="none" />
+
+    <EditText
+        android:id="@+id/filter_date_until"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="none"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/filter_date_from"
+        android:layout_alignStart="@+id/filter_date_from"
+        android:layout_alignEnd="@+id/filter_date_from" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/filter_date_until"
+        android:layout_alignBottom="@+id/filter_date_until"
+        android:layout_alignParentStart="true"
+        android:text="@string/filter_date_until"
+        android:layout_marginStart="15dp"
+        android:textSize="24sp" />
+</RelativeLayout>

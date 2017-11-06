@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "831608956089",
+    "firebase_url": "https://homework-4ef67.firebaseio.com",
+    "project_id": "homework-4ef67",
+    "storage_bucket": "homework-4ef67.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:831608956089:android:04a15320e91a8667",
+        "android_client_info": {
+          "package_name": "eu.baron_online.homework"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "831608956089-h1t1tblk5sm80f6tijhg4t7jqfh2lluc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "eu.baron_online.homework",
+            "certificate_hash": "ab660b986cfc7c4a6bbc983b150d02bcba6c41a8"
+          }
+        },
+        {
+          "client_id": "831608956089-pbq5nm8mbag1sgcp7p7rei1tvrn7glcd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUihn2WLzS_abEP-JqtyuGcDFj3ELuUhw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "831608956089-pbq5nm8mbag1sgcp7p7rei1tvrn7glcd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
