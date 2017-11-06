@@ -118,7 +118,6 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
         setLoading(false);
 
         finish();
-        HomeworkListActivity.instance.updateList();
     }
     public void onEntryMarkFailed() {
         Context context = getApplicationContext();

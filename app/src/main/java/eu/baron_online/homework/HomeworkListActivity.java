@@ -51,12 +51,10 @@ public class HomeworkListActivity extends ToolbarActivity {
     private ArrayAdapter<String> adapter;
 
     private View actionbarView;
-    private EditText searchEdittext;
     private ListView lView;
     private FloatingActionButton fab;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ImageButton filterButton, sortButton, searchButton;
-    private PopupWindow popupWindow;
+    private ImageButton filterButton, sortButton;
 
     private String[] subjects = null;
     private boolean filtered = false;
@@ -87,9 +85,6 @@ public class HomeworkListActivity extends ToolbarActivity {
                 startActivity(intent);
             }
         });
-
-        /*username = (String) DataInterchange.getValue("username");
-        password = (String) DataInterchange.getValue("password");*/
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listItems) {
             @Override
@@ -201,23 +196,6 @@ public class HomeworkListActivity extends ToolbarActivity {
             }
         });
 
-        /*searchButton = (ImageButton) actionbarView.findViewById(R.id.toolbar_search_button);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                View searchContainer = actionbarView.findViewById(R.id.toolbar_search_container);
-
-                //clear menu items
-                DataInterchange.addValue("actionbar_options_visible", true);
-                invalidateOptionsMenu();
-
-                searchContainer.setVisibility(View.GONE);
-                searchEdittext.setText("");
-            }
-        });
-
-        searchEdittext = (EditText) actionbarView.findViewById(R.id.toolbar_search_input);*/
-
         //set default sorting values (if necessary)
         if(!DataInterchange.existsPersistent("sort_column")) {
             Log.v("baron-online.eu", "Adding value for \"sort_column\"");
@@ -233,6 +211,7 @@ public class HomeworkListActivity extends ToolbarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("baron-online.eu", "eu.baron_online.homework.HomeworkListActivity.onResume()");
 
         updateList();
     }
@@ -491,7 +470,9 @@ public class HomeworkListActivity extends ToolbarActivity {
                 jsonParams.add(new BasicNameValuePair(filterType, filterParam));
             }
 
+            Log.d("baron-online.eu", "eu.baron_online.homework.HomeworkListActivity.RequestEntrys.filtered = " + filtered);
             result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_get_all.php", "GET", jsonParams);
+            Log.d("baron-online.eu", "eu.baron_online.homework.HomeworkListActivity.RequestEntrys.result = " + result.toString());
 
             return null;
         }

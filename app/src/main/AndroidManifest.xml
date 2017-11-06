@@ -32,6 +32,8 @@
         <activity
             android:name=".SettingsActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".RegisterActivity1" />
+        <activity android:name=".RegisterActivity2"></activity>
 
         <service
             android:name=".fcm.FCMManager">
@@ -46,8 +48,6 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".RegisterActivity1" />
-        <activity android:name=".RegisterActivity2"></activity>
     </application>
 
 </manifest>
