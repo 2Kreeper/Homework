@@ -37,6 +37,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -244,24 +246,39 @@ public class HomeworkListActivity extends ToolbarActivity {
                     dialog = new DatePickerDialog(HomeworkListActivity.this, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker picker, int year, int month, int dayOfMonth) {
-                            String yearStr = String.valueOf(year);
-                            String monthStr = String.valueOf(month);
-                            String dayStr = String.valueOf(dayOfMonth);
+                            try {
+                                String yearStr = String.valueOf(year);
+                                String monthStr = String.valueOf(month);
+                                String dayStr = String.valueOf(dayOfMonth);
 
-                            if(monthStr.length() == 1) {
-                                monthStr = "0" + monthStr;
+                                String untilString = yearStr + "-" + monthStr + "-" + dayStr;
+                                Log.v("baron-online.eu", untilString);
+                                SimpleDateFormat serverFmt = new SimpleDateFormat(getResources().getString(R.string.server_date_format));
+                                Date date = serverFmt.parse(untilString);
+
+                                SimpleDateFormat userFmt = new SimpleDateFormat(getResources().getString(R.string.local_date_format));
+                                untilString = userFmt.format(date);
+
+                                from.setText(untilString);
+
+                                //clear focus
+                                from.setFocusable(false);
+                                until.setFocusable(false);
+                                from.setFocusable(true);
+                                until.setFocusable(true);
+                            } catch(ParseException e) {
+                                e.printStackTrace();
                             }
-                            if(dayStr.length() == 1) {
-                                dayStr = "0" + dayStr;
-                            }
-
-                            from.setText(yearStr + "-" + monthStr + "-" + dayStr);
-
-                            //clear focus
-                            from.setFocusable(false);
-                            from.setFocusable(true);
                         }
-                    }, year, month, day);
+                    }, year, month - 1, day);
+                    dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (which == DialogInterface.BUTTON_NEGATIVE) {
+                                from.clearFocus();
+                            }
+                        }
+                    });
                     dialog.show();
                 }
             }
@@ -279,23 +296,39 @@ public class HomeworkListActivity extends ToolbarActivity {
                     DatePickerDialog dialog = new DatePickerDialog(HomeworkListActivity.this, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker picker, int year, int month, int dayOfMonth) {
-                            String yearStr = String.valueOf(year);
-                            String monthStr = String.valueOf(month);
-                            String dayStr = String.valueOf(dayOfMonth);
+                            try {
+                                String yearStr = String.valueOf(year);
+                                String monthStr = String.valueOf(month);
+                                String dayStr = String.valueOf(dayOfMonth);
 
-                            if(monthStr.length() == 1) {
-                                monthStr = "0" + monthStr;
+                                String untilString = yearStr + "-" + monthStr + "-" + dayStr;
+                                Log.v("baron-online.eu", untilString);
+                                SimpleDateFormat serverFmt = new SimpleDateFormat(getResources().getString(R.string.server_date_format));
+                                Date date = serverFmt.parse(untilString);
+
+                                SimpleDateFormat userFmt = new SimpleDateFormat(getResources().getString(R.string.local_date_format));
+                                untilString = userFmt.format(date);
+
+                                until.setText(untilString);
+
+                                //clear focus
+                                from.setFocusable(false);
+                                until.setFocusable(false);
+                                from.setFocusable(true);
+                                until.setFocusable(true);
+                            } catch(ParseException e) {
+                                e.printStackTrace();
                             }
-                            if(dayStr.length() == 1) {
-                                dayStr = "0" + dayStr;
-                            }
-
-                            until.setText(yearStr + "-" + monthStr + "-" + dayStr);
-
-                            //set focus on finish button
-                            d.getButton(AlertDialog.BUTTON_POSITIVE).requestFocus();
                         }
-                    }, year, month, day);
+                    }, year, month - 1, day);
+                    dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (which == DialogInterface.BUTTON_NEGATIVE) {
+                                until.clearFocus();
+                            }
+                        }
+                    });
                     dialog.show();
                 }
             }

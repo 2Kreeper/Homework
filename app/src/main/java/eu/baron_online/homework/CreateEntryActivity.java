@@ -116,29 +116,6 @@ public class CreateEntryActivity extends ToolbarActivity {
                     int month = Integer.parseInt(DateFormat.format("MM", time).toString());
                     int day = Integer.parseInt(DateFormat.format("dd", time).toString());
 
-                    Log.v("baron-online.eu", year + "-" + month + "-" + day);
-
-                    /*DatePickerDialog dialog = new DatePickerDialog(CreateEntryActivity.this, new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker picker, int year, int month, int dayOfMonth) {
-                            String yearStr = String.valueOf(year);
-                            String monthStr = String.valueOf(month);
-                            String dayStr = String.valueOf(dayOfMonth);
-
-                            if(monthStr.length() == 1) {
-                                monthStr = "0" + monthStr;
-                            }
-                            if(dayStr.length() == 1) {
-                                dayStr = "0" + dayStr;
-                            }
-
-                            until.setText(yearStr + "-" + monthStr + "-" + dayStr);
-                            until.clearFocus();
-
-                            //manually call TextChangeEvent
-                            watcher.afterTextChanged(new SpannableStringBuilder());
-                        }
-                    }, year, month, day);*/
                     DatePickerDialog dialog = new DatePickerDialog(CreateEntryActivity.this, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker picker, int yearSelected, int monthSelected, int dayOfMonthSelected) {
@@ -146,7 +123,6 @@ public class CreateEntryActivity extends ToolbarActivity {
                                 String yearStr = String.valueOf(yearSelected);
                                 String monthStr = String.valueOf(monthSelected);
                                 String dayStr = String.valueOf(dayOfMonthSelected);
-
 
                                 String untilString = yearStr + "-" + monthStr + "-" + dayStr;
                                 Log.v("baron-online.eu", untilString);
@@ -171,7 +147,6 @@ public class CreateEntryActivity extends ToolbarActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             if (which == DialogInterface.BUTTON_NEGATIVE) {
                                 until.clearFocus();
-
                             }
                         }
                     });
