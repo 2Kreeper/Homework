@@ -26,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class RegisterActivity2 extends ToolbarActivity {
@@ -188,7 +189,7 @@ public class RegisterActivity2 extends ToolbarActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            List<NameValuePair> jsonParams = new ArrayList<>();
+            /*List<NameValuePair> jsonParams = new ArrayList<>();
             jsonParams.add(new BasicNameValuePair("user", (String) DataInterchange.getValue("usernameText")));
             jsonParams.add(new BasicNameValuePair("pass", (String) DataInterchange.getValue("passwordText")));
             jsonParams.add(new BasicNameValuePair("school", (String) DataInterchange.getValue("schoolText")));
@@ -198,6 +199,18 @@ public class RegisterActivity2 extends ToolbarActivity {
             for(String[] course : tableContent) {
                 jsonParams.add(new BasicNameValuePair("cs_sub[]", course[0]));
                 jsonParams.add(new BasicNameValuePair("cs_tcs[]", course[1]));
+            }*/
+
+            HashMap<String, String> jsonParams = new HashMap<>();
+            jsonParams.put("user", (String) DataInterchange.getValue("usernameText"));
+            jsonParams.put("pass", (String) DataInterchange.getValue("passwordText"));
+            jsonParams.put("school", (String) DataInterchange.getValue("schoolText"));
+            jsonParams.put("class", (String) DataInterchange.getValue("classText"));
+            jsonParams.put("token", (String) DataInterchange.getPersistentString("fcmtoken"));
+
+            for(String[] course : tableContent) {
+                jsonParams.put("cs_sub[]", course[0]);
+                jsonParams.put("cs_tcs[]", course[1]);
             }
 
             result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_user_register.php", "GET", jsonParams);

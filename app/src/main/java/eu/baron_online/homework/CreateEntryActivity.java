@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class CreateEntryActivity extends ToolbarActivity {
@@ -176,7 +177,7 @@ public class CreateEntryActivity extends ToolbarActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            List<NameValuePair> jsonParams = new ArrayList<NameValuePair>();
+            /*List<NameValuePair> jsonParams = new ArrayList<NameValuePair>();
             jsonParams.add(new BasicNameValuePair("user", (String) DataInterchange.getValue("username")));
             jsonParams.add(new BasicNameValuePair("pass", (String) DataInterchange.getValue("password")));
             jsonParams.add(new BasicNameValuePair("subject", subjectStr));
@@ -184,7 +185,17 @@ public class CreateEntryActivity extends ToolbarActivity {
             jsonParams.add(new BasicNameValuePair("page", pageStr));
             jsonParams.add(new BasicNameValuePair("numbers", numbersStr));
             jsonParams.add(new BasicNameValuePair("until", untilStr));
-            jsonParams.add(new BasicNameValuePair("class_id", (String) DataInterchange.getValue("class_id")));
+            jsonParams.add(new BasicNameValuePair("class_id", (String) DataInterchange.getValue("class_id")));*/
+
+            HashMap<String, String> jsonParams = new HashMap<>();
+            jsonParams.put("user", (String) DataInterchange.getValue("username"));
+            jsonParams.put("pass", (String) DataInterchange.getValue("password"));
+            jsonParams.put("subject", subjectStr);
+            jsonParams.put("media", mediaStr);
+            jsonParams.put("page", pageStr);
+            jsonParams.put("numbers", numbersStr);
+            jsonParams.put("until", untilStr);
+            jsonParams.put("class_id", (String) DataInterchange.getValue("class_id"));
 
             result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_entry_create.php", "GET", jsonParams);
 

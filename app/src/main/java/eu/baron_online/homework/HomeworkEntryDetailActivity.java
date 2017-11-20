@@ -20,6 +20,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class HomeworkEntryDetailActivity extends ToolbarActivity {
@@ -141,10 +142,15 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            List<NameValuePair> jsonParams = new ArrayList<>();
+            /*List<NameValuePair> jsonParams = new ArrayList<>();
             jsonParams.add(new BasicNameValuePair("user", (String) DataInterchange.getValue("username")));
             jsonParams.add(new BasicNameValuePair("pass", (String) DataInterchange.getValue("password")));
-            jsonParams.add(new BasicNameValuePair("id", Integer.toString(this.id)));
+            jsonParams.add(new BasicNameValuePair("id", Integer.toString(this.id)));*/
+
+            HashMap<String, String> jsonParams = new HashMap<>();
+            jsonParams.put("user", (String) DataInterchange.getValue("username"));
+            jsonParams.put("pass", (String) DataInterchange.getValue("password"));
+            jsonParams.put("id", Integer.toString(this.id));
 
             result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_get_entry.php", "GET", jsonParams);
 
@@ -167,10 +173,15 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            List<NameValuePair> jsonParams = new ArrayList<>();
+            /*List<NameValuePair> jsonParams = new ArrayList<>();
             jsonParams.add(new BasicNameValuePair("user", (String) DataInterchange.getValue("username")));
             jsonParams.add(new BasicNameValuePair("pass", (String) DataInterchange.getValue("password")));
-            jsonParams.add(new BasicNameValuePair("homework_id", Integer.toString(homeworkID)));
+            jsonParams.add(new BasicNameValuePair("homework_id", Integer.toString(homeworkID)));*/
+
+            HashMap<String, String> jsonParams = new HashMap<>();
+            jsonParams.put("user", (String) DataInterchange.getValue("username"));
+            jsonParams.put("pass", (String) DataInterchange.getValue("password"));
+            jsonParams.put("homework_id", Integer.toString(homeworkID));
 
             result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_entry_done.php", "GET", jsonParams);
 

@@ -2,7 +2,6 @@ package eu.baron_online.homework;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -13,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableStringBuilder;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +24,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,11 +33,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class HomeworkListActivity extends ToolbarActivity {
@@ -481,7 +478,7 @@ public class HomeworkListActivity extends ToolbarActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            List<NameValuePair> jsonParams = new ArrayList<>();
+            /*List<NameValuePair> jsonParams = new ArrayList<>();
             jsonParams.add(new BasicNameValuePair("user", (String) DataInterchange.getValue("username")));
             jsonParams.add(new BasicNameValuePair("pass", (String) DataInterchange.getValue("password")));
             jsonParams.add(new BasicNameValuePair("sort_col", (String) DataInterchange.getPersistentString("sort_column")));
@@ -490,6 +487,17 @@ public class HomeworkListActivity extends ToolbarActivity {
             if(filtered) {
                 jsonParams.add(new BasicNameValuePair("filter", "true"));
                 jsonParams.add(new BasicNameValuePair(filterType, filterParam));
+            }*/
+
+            HashMap<String, String> jsonParams = new HashMap<>();
+            jsonParams.put("user", (String) DataInterchange.getValue("username"));
+            jsonParams.put("pass", (String) DataInterchange.getValue("password"));
+            jsonParams.put("sort_col", (String) DataInterchange.getPersistentString("sort_column"));
+            jsonParams.put("sort_md", (String) DataInterchange.getPersistentString("sort_mode"));
+
+            if(filtered) {
+                jsonParams.put("filter", "true");
+                jsonParams.put(filterType, filterParam);
             }
 
             Log.d("baron-online.eu", "eu.baron_online.homework.HomeworkListActivity.RequestEntrys.filtered = " + filtered);
@@ -510,9 +518,13 @@ public class HomeworkListActivity extends ToolbarActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            List<NameValuePair> jsonParams = new ArrayList<>();
+            /*List<NameValuePair> jsonParams = new ArrayList<>();
             jsonParams.add(new BasicNameValuePair("user", (String) DataInterchange.getValue("username")));
-            jsonParams.add(new BasicNameValuePair("pass", (String) DataInterchange.getValue("password")));
+            jsonParams.add(new BasicNameValuePair("pass", (String) DataInterchange.getValue("password")));*/
+
+            HashMap<String, String> jsonParams = new HashMap<>();
+            jsonParams.put("user", (String) DataInterchange.getValue("username"));
+            jsonParams.put("pass", (String) DataInterchange.getValue("password"));
 
             result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_get_subjects.php", "GET", jsonParams);
 

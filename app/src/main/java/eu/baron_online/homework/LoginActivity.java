@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class LoginActivity extends ToolbarActivity {
@@ -138,12 +139,15 @@ public class LoginActivity extends ToolbarActivity {
 
         @Override
         protected String doInBackground(String... params) {
-
             String username = params[0], password = params[1];
 
-            List<NameValuePair> jsonParams = new ArrayList<NameValuePair>();
+            /*List<NameValuePair> jsonParams = new ArrayList<NameValuePair>();
             jsonParams.add(new BasicNameValuePair("user", username));
-            jsonParams.add(new BasicNameValuePair("pass", password));
+            jsonParams.add(new BasicNameValuePair("pass", password));*/
+
+            HashMap<String, String> jsonParams = new HashMap<>();
+            jsonParams.put("user", username);
+            jsonParams.put("pass", password);
 
             result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_user_exists.php", "GET", jsonParams);
 
@@ -163,10 +167,15 @@ public class LoginActivity extends ToolbarActivity {
         protected String doInBackground(String... params) {
             String username = params[0], password = params[1];
 
-            List<NameValuePair> jsonParams = new ArrayList<NameValuePair>();
+            /*List<NameValuePair> jsonParams = new ArrayList<NameValuePair>();
             jsonParams.add(new BasicNameValuePair("user", username));
             jsonParams.add(new BasicNameValuePair("pass", password));
-            jsonParams.add(new BasicNameValuePair("new_token", FirebaseInstanceId.getInstance().getToken()));
+            jsonParams.add(new BasicNameValuePair("new_token", FirebaseInstanceId.getInstance().getToken()));*/
+
+            HashMap<String, String> jsonParams = new HashMap<>();
+            jsonParams.put("user", username);
+            jsonParams.put("pass", password);
+            jsonParams.put("new_token", FirebaseInstanceId.getInstance().getToken());
 
             result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_user_update_token.php", "GET", jsonParams);
 
