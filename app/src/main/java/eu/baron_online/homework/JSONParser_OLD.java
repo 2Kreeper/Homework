@@ -29,7 +29,7 @@ public class JSONParser_OLD {
     private static String json = "";
 
     // constructor
-    public JSONParser() {
+    public JSONParser_OLD() {
 
     }
 
