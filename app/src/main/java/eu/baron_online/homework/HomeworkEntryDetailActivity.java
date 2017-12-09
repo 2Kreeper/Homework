@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.service.notification.StatusBarNotification;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -47,6 +48,10 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
         Intent startIntent = getIntent();
         showID = startIntent.getIntExtra("id", 1);
+
+        if(startIntent.getBooleanExtra("notification", false)) {
+            tryKillNotification(showID); //if opened via notification, kill the notification
+        }
 
         media = (TextView) findViewById(R.id.homeworkMedia);
         page = (TextView) findViewById(R.id.homeworkPage);
@@ -129,6 +134,12 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
         toast.show();
 
         setLoading(false);
+    }
+
+    private void tryKillNotification(int id) {
+        if(notificationExists(id)) {
+            mNotificationManager.cancel(id);
+        }
     }
 
     class RequestEntry extends AsyncTask<String, String, String> {

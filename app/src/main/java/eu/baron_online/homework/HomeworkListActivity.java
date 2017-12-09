@@ -211,7 +211,6 @@ public class HomeworkListActivity extends ToolbarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("baron-online.eu", "eu.baron_online.homework.HomeworkListActivity.onResume()");
 
         updateList();
     }
@@ -500,9 +499,7 @@ public class HomeworkListActivity extends ToolbarActivity {
                 jsonParams.put(filterType, filterParam);
             }
 
-            Log.d("baron-online.eu", "eu.baron_online.homework.HomeworkListActivity.RequestEntrys.filtered = " + filtered);
             result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_get_all.php", "GET", jsonParams);
-            Log.d("baron-online.eu", "eu.baron_online.homework.HomeworkListActivity.RequestEntrys.result = " + result.toString());
 
             return null;
         }

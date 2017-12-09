@@ -126,7 +126,7 @@ public class CreateEntryActivity extends ToolbarActivity {
                                 String dayStr = String.valueOf(dayOfMonthSelected);
 
                                 String untilString = yearStr + "-" + monthStr + "-" + dayStr;
-                                Log.v("baron-online.eu", untilString);
+
                                 SimpleDateFormat serverFmt = new SimpleDateFormat(getResources().getString(R.string.server_date_format));
                                 Date date = serverFmt.parse(untilString);
 
@@ -194,9 +194,10 @@ public class CreateEntryActivity extends ToolbarActivity {
             jsonParams.put("media", mediaStr);
             jsonParams.put("page", pageStr);
             jsonParams.put("numbers", numbersStr);
-            jsonParams.put("until", untilStr);
+            jsonParams.put("until", changeDateFormat(untilStr, getResources().getString(R.string.local_date_format), getResources().getString(R.string.server_date_format)));
             jsonParams.put("class_id", (String) DataInterchange.getValue("class_id"));
 
+            Log.v("baron-online.eu", "Creating new entry until " + untilStr);
             result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_entry_create.php", "GET", jsonParams);
 
             return null;

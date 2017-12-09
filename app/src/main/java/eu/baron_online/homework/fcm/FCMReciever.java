@@ -25,6 +25,7 @@ import eu.baron_online.homework.DataInterchange;
 import eu.baron_online.homework.HomeworkEntryDetailActivity;
 import eu.baron_online.homework.HomeworkListActivity;
 import eu.baron_online.homework.R;
+import eu.baron_online.homework.ToolbarActivity;
 
 public class FCMReciever extends FirebaseMessagingService {
 
@@ -44,7 +45,7 @@ public class FCMReciever extends FirebaseMessagingService {
             RemoteMessage.Notification n = remoteMessage.getNotification();
 
             Log.d("baron-online.eu", "Message Notification Body: " + n.getBody() + "\nMessage Notification Title: " + n.getTitle());
-            showNotification(45899, n.getTitle(), n.getBody());
+            //showNotification(45899, n.getTitle(), n.getBody());
         }
     }
 
@@ -83,36 +84,25 @@ public class FCMReciever extends FirebaseMessagingService {
 
         try {
             data = data.replace("{value=", "");
-            data = data.substring(0, data.length() - 1);
+            data = data.substring(0, data.length());
 
             JSONObject object = new JSONObject(data);
+            Log.d("baron-online.eu", "Incoming message: " + object.toString());
 
-            //if notification is not for currently logged in user, quit
-            /*if(!object.getString("USERNAME").equals(DataInterchange.getPersistentString("username"))) {
-                return;
-            }*/
+            int entryId = object.getInt("ENTRY_ID");
+            Intent targetIntent = new Intent(ToolbarActivity.instance.getApplicationContext(), HomeworkEntryDetailActivity.class);
+            targetIntent.putExtra("id", entryId);
+            targetIntent.putExtra("notification", true);
 
-            String untilStr = object.getString("UNTIL");
-
-            SimpleDateFormat serverFmt = new SimpleDateFormat(getResources().getString(R.string.server_date_format));
-            Date date = serverFmt.parse(untilStr);
-
-            SimpleDateFormat userFmt = new SimpleDateFormat(getResources().getString(R.string.local_date_format));
-            untilStr = userFmt.format(date);
-
-            Intent resultIntent = new Intent(this, HomeworkEntryDetailActivity.class);
-            resultIntent.putExtra("id", object.getInt("ENTRY_ID"));
-
+            String formattedDate = ToolbarActivity.changeDateFormat(object.getString("UNTIL"), getResources().getString(R.string.server_date_format), getResources().getString(R.string.local_date_format));
             showNotification(
-                    object.getInt("ENTRY_ID"),
-                    String.format(getResources().getString(R.string.notification_new_homework_title), object.getString("SUBJECT")),
-                    String.format(getResources().getString(R.string.notification_new_homework_text), object.getString("MEDIA"), object.getString("PAGE"), untilStr),
+                    entryId,
+                    String.format(getResources().getString(R.string.notification_new_homework_title), object.getJSONObject("COURSE").getString("SUBJECT")),
+                    String.format(getResources().getString(R.string.notification_new_homework_text), object.getString("MEDIA"), object.getString("PAGE"), formattedDate),
                     HomeworkEntryDetailActivity.class,
-                    resultIntent
+                    targetIntent
             );
         } catch (JSONException e) {
-            Log.e("baron-online.eu", e.getMessage());
-        } catch (ParseException e) {
             Log.e("baron-online.eu", e.getMessage());
         }
     }

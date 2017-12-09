@@ -9,6 +9,7 @@ import android.service.notification.StatusBarNotification;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -16,8 +17,11 @@ import android.widget.Toast;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 
 public class ToolbarActivity extends AppCompatActivity {
@@ -26,7 +30,7 @@ public class ToolbarActivity extends AppCompatActivity {
 
     protected Toolbar toolbar;
     protected ProgressDialog progressDialog;
-    protected NotificationManager mNotificationManager;
+    protected static NotificationManager mNotificationManager;
 
     private int[] menuIgnoreArray = {};
 
@@ -127,7 +131,7 @@ public class ToolbarActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    protected String sha256(String text) {
+    public static String sha256(String text) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(text.getBytes(StandardCharsets.UTF_8));
@@ -139,7 +143,6 @@ public class ToolbarActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Toast.makeText(getApplicationContext(), "Unable to hash '" + text + "'!", Toast.LENGTH_SHORT);
         return null;
     }
 
@@ -153,7 +156,7 @@ public class ToolbarActivity extends AppCompatActivity {
         return result;
     }
 
-    protected boolean notificationExists(int id) {
+    public static boolean notificationExists(int id) {
         StatusBarNotification[] notifications = mNotificationManager.getActiveNotifications();
 
         for(StatusBarNotification notification : notifications) {
@@ -163,5 +166,19 @@ public class ToolbarActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    public static String changeDateFormat(String date, String originalFmtString, String targetFmtString) {
+        try {
+            SimpleDateFormat originalFmt = new SimpleDateFormat(originalFmtString);
+            Date dateObject = originalFmt.parse(date);
+
+            SimpleDateFormat targetFmt = new SimpleDateFormat(targetFmtString);
+            return targetFmt.format(dateObject);
+        } catch (ParseException e) {
+            Log.e("baron-online.eu", e.getMessage());
+        }
+
+        return null;
     }
 }
