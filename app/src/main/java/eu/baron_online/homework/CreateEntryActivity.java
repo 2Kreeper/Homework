@@ -121,8 +121,10 @@ public class CreateEntryActivity extends ToolbarActivity {
                         @Override
                         public void onDateSet(DatePicker picker, int yearSelected, int monthSelected, int dayOfMonthSelected) {
                             try {
+                                Log.d("baron-online.eu", yearSelected + " " + monthSelected + " " + dayOfMonthSelected);
+
                                 String yearStr = String.valueOf(yearSelected);
-                                String monthStr = String.valueOf(monthSelected);
+                                String monthStr = String.valueOf(monthSelected + 1);
                                 String dayStr = String.valueOf(dayOfMonthSelected);
 
                                 String untilString = yearStr + "-" + monthStr + "-" + dayStr;
