@@ -120,29 +120,19 @@ public class CreateEntryActivity extends ToolbarActivity {
                     DatePickerDialog dialog = new DatePickerDialog(CreateEntryActivity.this, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker picker, int yearSelected, int monthSelected, int dayOfMonthSelected) {
-                            try {
-                                Log.d("baron-online.eu", yearSelected + " " + monthSelected + " " + dayOfMonthSelected);
+                            Log.d("baron-online.eu", yearSelected + " " + monthSelected + " " + dayOfMonthSelected);
 
-                                String yearStr = String.valueOf(yearSelected);
-                                String monthStr = String.valueOf(monthSelected + 1);
-                                String dayStr = String.valueOf(dayOfMonthSelected);
+                            String yearStr = String.valueOf(yearSelected);
+                            String monthStr = String.valueOf(monthSelected + 1);
+                            String dayStr = String.valueOf(dayOfMonthSelected);
 
-                                String untilString = yearStr + "-" + monthStr + "-" + dayStr;
+                            String untilString = changeDateFormat(yearStr + "-" + monthStr + "-" + dayStr, getResources().getString(R.string.server_date_format), getResources().getString(R.string.local_date_format));
 
-                                SimpleDateFormat serverFmt = new SimpleDateFormat(getResources().getString(R.string.server_date_format));
-                                Date date = serverFmt.parse(untilString);
+                            until.setText(untilString);
+                            until.clearFocus();
 
-                                SimpleDateFormat userFmt = new SimpleDateFormat(getResources().getString(R.string.local_date_format));
-                                untilString = userFmt.format(date);
-
-                                until.setText(untilString);
-                                until.clearFocus();
-
-                                //manually call TextChangeEvent
-                                watcher.afterTextChanged(new SpannableStringBuilder());
-                            } catch(ParseException e) {
-                                e.printStackTrace();
-                            }
+                            //manually call TextChangeEvent
+                            watcher.afterTextChanged(new SpannableStringBuilder());
                         }
                     }, year, month - 1, day);
                     dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(android.R.string.cancel), new DialogInterface.OnClickListener() {

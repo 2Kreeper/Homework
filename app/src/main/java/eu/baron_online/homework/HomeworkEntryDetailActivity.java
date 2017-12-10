@@ -88,13 +88,7 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
                 finish();
             }*/
 
-            String untilStr = result.getString("UNTIL");
-
-            SimpleDateFormat serverFmt = new SimpleDateFormat(getResources().getString(R.string.server_date_format));
-            Date date = serverFmt.parse(untilStr);
-
-            SimpleDateFormat userFmt = new SimpleDateFormat(getResources().getString(R.string.local_date_format));
-            untilStr = userFmt.format(date);
+            String untilStr = changeDateFormat(result.getString("UNTIL"), getResources().getString(R.string.server_date_format), getResources().getString(R.string.local_date_format));
 
             //displaying results
             getSupportActionBar().setTitle(result.getString("SUBJECT"));
@@ -104,8 +98,6 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
             until.setText(String.format(getResources().getString(R.string.until_placeholder), untilStr));
 
         } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {
             //show toast in UI thread
