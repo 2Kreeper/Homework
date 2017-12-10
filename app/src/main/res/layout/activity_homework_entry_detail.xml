@@ -17,12 +17,12 @@
         ></include>
 
     <TextView
-        android:id="@+id/homeworkNumbers"
+        android:id="@+id/homeworkCreator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/homeworkPage"
+        android:layout_alignTop="@+id/homeworkUntil"
         android:layout_marginTop="62dp"
         android:text="@string/loading"
         android:textAlignment="center"
@@ -38,7 +38,7 @@
         android:text="@string/flag" />
 
     <TextView
-        android:id="@+id/homeworkPage"
+        android:id="@+id/homeworkUntil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/homeworkNumbers"
+        android:layout_below="@+id/homeworkCreator"
         android:layout_marginTop="36dp"
         android:text="@string/loading"
         android:textAlignment="center"

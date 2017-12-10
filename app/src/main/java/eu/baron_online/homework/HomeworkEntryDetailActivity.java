@@ -4,25 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.service.notification.StatusBarNotification;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
@@ -54,8 +45,8 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
         }
 
         media = (TextView) findViewById(R.id.homeworkMedia);
-        page = (TextView) findViewById(R.id.homeworkPage);
-        numbers = (TextView) findViewById(R.id.homeworkNumbers);
+        page = (TextView) findViewById(R.id.homeworkUntil);
+        numbers = (TextView) findViewById(R.id.homeworkCreator);
         until = (TextView) findViewById(R.id.homeworkUntil);
 
         setLoading(true);

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_create_entry"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_wrapper_margin"
+    android:paddingLeft="@dimen/activity_wrapper_margin"
+    android:paddingRight="@dimen/activity_wrapper_margin"
+    android:paddingTop="@dimen/activity_wrapper_margin"
+    tools:context="eu.baron_online.homework.FlagActivity"
+    android:layout_width="match_parent">
+
+    <TextView
+        android:id="@+id/homeworkMedia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="50dp"
+        android:text="Buch"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/homeworkUntil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/homeworkMedia"
+        android:layout_marginTop="50dp"
+        android:text="Bis 30.12.2017"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/homeworkCreator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/homeworkUntil"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="50dp"
+        android:text="Von 2Kreeper"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+    <Spinner
+        android:id="@+id/homeworkFlagReason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/homeworkCreator"
+        android:layout_marginTop="50dp" />
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+</RelativeLayout>
