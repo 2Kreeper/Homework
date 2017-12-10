@@ -17,20 +17,21 @@ import org.json.JSONObject;
 public class JSONParser {
 	
 	public static JSONObject makeHttpRequest(String url, String type, HashMap<String, String> params) {
-		String paramString = "", fullUrl = "";
+		String paramString = "";
 		
 		if(type.equals("GET")) {
 			Iterator<Entry<String, String>> it = params.entrySet().iterator();
 			while(it.hasNext()) {
-				Map.Entry pair = (Map.Entry) it.next();
+				Map.Entry pair = it.next();
 				paramString += pair.getKey() + "=" + pair.getValue() + "&";
 			}
 			if(paramString.length() > 0) {
 				paramString = paramString.substring(0, paramString.length() - 1);
-				fullUrl = url + "?" + paramString;
 			}
 			
 			String result = sendRequestGET(url, paramString);
+
+			Log.v("baron-online.eu", "Result: \"" + result + "\"");
 
 			try {
 				return new JSONObject(result);
@@ -39,6 +40,12 @@ public class JSONParser {
 			}
 		} else if(type.equals("POST")) {
 			String result = sendRequestPOST(url, params);
+
+            try {
+                return new JSONObject(result);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 		}
 		
 		return null;
@@ -47,6 +54,8 @@ public class JSONParser {
 	private static String sendRequestGET(String urlString, String params) {
 		try {
 			URL url = new URL(urlString + "?" + params);
+
+			Log.v("baron-online.eu", url.toString());
 			
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");
@@ -75,7 +84,7 @@ public class JSONParser {
 			
 			Iterator<Entry<String, String>> it = params.entrySet().iterator();
 			while(it.hasNext()) {
-				Map.Entry pair = (Map.Entry) it.next();
+				Map.Entry pair = it.next();
 				paramString += pair.getKey() + "=" + pair.getValue() + "&";
 			}
 			

@@ -15,36 +15,47 @@
         android:id="@+id/registerUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/registerSchool"
+        android:layout_below="@+id/toolbar"
         android:layout_marginTop="47dp"
         android:ems="10"
         android:hint="@string/username"
-        android:inputType="textPersonName"
-        android:layout_below="@+id/toolbar"
-        android:layout_alignStart="@+id/registerPassword" />
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/registerPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/registerSchool"
+        android:layout_below="@+id/registerUsername"
+        android:layout_marginTop="47dp"
         android:ems="10"
         android:hint="@string/password"
-        android:inputType="textPassword"
-        android:layout_marginTop="47dp"
-        android:layout_below="@+id/registerUsername"
-        android:layout_centerHorizontal="true" />
+        android:inputType="textPassword" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/registerSchool"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/school"
-        android:inputType="textPersonName"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/registerPassword"
-        android:layout_alignStart="@+id/registerPassword"
-        android:layout_marginTop="47dp" />
+        android:layout_marginStart="82dp"
+        android:layout_marginTop="47dp"
+        android:ems="10"
+        android:hint="@string/school" />
 
-    <EditText
+    <!--<EditText
+        android:id="@+id/registerClass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/registerSchool"
+        android:layout_below="@+id/registerSchool"
+        android:layout_marginTop="47dp"
+        android:ems="10"
+        android:hint="@string/class_string"
+        android:inputType="textPersonName" />-->
+
+    <AutoCompleteTextView
         android:id="@+id/registerClass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,5 +77,18 @@
         android:enabled="false"
         android:text="@string/_continue"
         android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/username_taken_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/registerUsername"
+        android:layout_alignStart="@+id/registerUsername"
+        android:layout_below="@+id/registerUsername"
+        android:text="@string/username_taken"
+        android:textAlignment="center"
+        android:textColor="@color/colorWarning"
+        android:textStyle="bold"
+        android:visibility="invisible" />
 
 </RelativeLayout>

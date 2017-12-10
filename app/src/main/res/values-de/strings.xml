@@ -43,4 +43,11 @@
     <string name="error_no_internet">Nicht mit dem Internet verbunden!\nBitte aktiviere WLAN oder mobile Daten</string>
     <string name="notification_new_homework_title">Neue Hausaufgabe in %1$s</string>
     <string name="notification_new_homework_text">Seite(n) %2$s im %1$s bis zum %3$s</string>
+    <string name="register_class">Nach Klasse registrieren</string>
+    <string name="register_course">Nach Kursen registrieren</string>
+    <string name="_continue">Weiter</string>
+    <string name="addCourse">Kurs hinzufügen</string>
+    <string name="course">Kurs</string>
+    <string name="teacher">Lehrer</string>
+    <string name="username_taken">Dieser Name ist bereits vergeben!</string>
 </resources>

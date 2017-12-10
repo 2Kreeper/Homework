@@ -6,7 +6,9 @@ import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -92,16 +94,18 @@ public class LoginActivity extends ToolbarActivity {
             boolean userExists = result.getInt("success") == 1;
 
             if (userExists) {
-                DataInterchange.addValue("username", result.getString("USERNAME"));
-                DataInterchange.addValue("password", result.getString("PASSWORD"));
-                DataInterchange.addValue("class_id", Integer.toString(result.getInt("CLASS_ID")));
-                DataInterchange.addValue("school", result.getString("SCHOOL"));
-                DataInterchange.addValue("class", result.getString("CLASS"));
+                JSONObject userInfo = result.getJSONObject("user_info");
 
-                DataInterchange.addPersistent("username", result.getString("USERNAME"));
-                DataInterchange.addPersistent("password", result.getString("PASSWORD"));
+                DataInterchange.addValue("username", userInfo.getString("USERNAME"));
+                DataInterchange.addValue("password", userInfo.getString("PASSWORD"));
+                DataInterchange.addValue("class_id", Integer.toString(userInfo.getInt("CLASS_ID")));
+                DataInterchange.addValue("school", userInfo.getString("SCHOOL"));
+                DataInterchange.addValue("class", userInfo.getString("CLASS"));
 
-                new UpdateUserToken().execute(result.getString("USERNAME"), result.getString("PASSWORD"));
+                DataInterchange.addPersistent("username", userInfo.getString("USERNAME"));
+                DataInterchange.addPersistent("password", userInfo.getString("PASSWORD"));
+
+                new UpdateUserToken().execute(userInfo.getString("USERNAME"), userInfo.getString("PASSWORD"));
 
                 //start activity and kill old one
                 Intent intent = new Intent(this, HomeworkListActivity.class);

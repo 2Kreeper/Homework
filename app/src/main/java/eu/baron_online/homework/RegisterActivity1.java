@@ -1,14 +1,26 @@
 package eu.baron_online.homework;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.text.TextWatcher;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RegisterActivity1 extends ToolbarActivity {
 
@@ -16,8 +28,12 @@ public class RegisterActivity1 extends ToolbarActivity {
     public String usernameText = "", passwordText = "", schoolText = "", classText = "";
 
     protected TextWatcher watcher;
-    protected EditText usernameField, passwordField, schoolField, classField;
+    protected EditText usernameField, passwordField;
+    protected TextView usernameTakenTextview;
+    protected AutoCompleteTextView schoolField, classField;
     private Button continueRegisterButton;
+
+    private boolean usernameTaken = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +55,15 @@ public class RegisterActivity1 extends ToolbarActivity {
         //set variables
         usernameField = (EditText) findViewById(R.id.registerUsername);
         passwordField = (EditText) findViewById(R.id.registerPassword);
-        schoolField = (EditText) findViewById(R.id.registerSchool);
-        classField = (EditText) findViewById(R.id.registerClass);
+        schoolField = (AutoCompleteTextView) findViewById(R.id.registerSchool);
+        classField = (AutoCompleteTextView) findViewById(R.id.registerClass);
+        usernameTakenTextview = (TextView) findViewById(R.id.username_taken_textview);
+
+        //init school autocomplete view: make HTTP-Request, results are used in setSchools(JSONObject response)
+        new GetSchools().execute();
+
+        //init class autocomplete view: make HTTP-Request, results are used in setClasses(JSONObject response)
+        new GetClasses().execute();
 
         continueRegisterButton = (Button) findViewById(R.id.continueRegisterButton);
         continueRegisterButton.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +77,7 @@ public class RegisterActivity1 extends ToolbarActivity {
             }
         });
 
+        //enable button if all data is given
         watcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -71,7 +95,7 @@ public class RegisterActivity1 extends ToolbarActivity {
                 schoolText = schoolField.getText().toString();
                 classText = classField.getText().toString();
 
-                if(!TextUtils.isEmpty(usernameText) && !TextUtils.isEmpty(passwordField.getText().toString()) && !TextUtils.isEmpty(schoolText) && !TextUtils.isEmpty(classText)) {
+                if(!TextUtils.isEmpty(usernameText) && !TextUtils.isEmpty(passwordField.getText().toString()) && !TextUtils.isEmpty(schoolText) && !TextUtils.isEmpty(classText) && !usernameTaken) {
                     continueRegisterButton.setEnabled(true);
                 } else {
                     continueRegisterButton.setEnabled(false);
@@ -84,5 +108,127 @@ public class RegisterActivity1 extends ToolbarActivity {
         passwordField.addTextChangedListener(watcher);
         schoolField.addTextChangedListener(watcher);
         classField.addTextChangedListener(watcher);
+
+        //check if username is already taken
+        usernameField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                new CheckUsername(s.toString()).execute();
+            }
+        });
+    }
+
+    private void setSchools(JSONObject response) {
+        try {
+            ArrayList<String> schools = new ArrayList<>();
+            JSONArray arr = response.getJSONArray("schools");
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject school = arr.getJSONObject(i);
+                schools.add(school.getString("name"));
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_expandable_list_item_1, schools);
+            schoolField.setAdapter(adapter);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setClasses(JSONObject response) {
+        try {
+            ArrayList<String> classes = new ArrayList<>();
+            JSONArray arr = response.getJSONArray("classes");
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject school = arr.getJSONObject(i);
+                classes.add(school.getString("name"));
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_expandable_list_item_1, classes);
+            classField.setAdapter(adapter);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setUsernameTaken(JSONObject response) {
+        try {
+            usernameTaken = response.getInt("success") == 1;
+            if(usernameTaken) {
+                usernameTakenTextview.setVisibility(TextView.VISIBLE);
+            } else {
+                usernameTakenTextview.setVisibility(TextView.INVISIBLE);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            watcher.afterTextChanged(null);
+        }
+    }
+
+    class GetSchools extends AsyncTask<String, String, String> {
+        private JSONObject result;
+
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String, String> jsonParams = new HashMap<>();
+
+            result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_get_schools.php", "GET", jsonParams);
+
+            return null;
+        }
+
+        protected void onPostExecute(String str) {
+            RegisterActivity1.instance.setSchools(result);
+        }
+    }
+
+    class GetClasses extends AsyncTask<String, String, String> {
+        private JSONObject result;
+
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String, String> jsonParams = new HashMap<>();
+
+            result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_get_classes.php", "GET", jsonParams);
+
+            return null;
+        }
+
+        protected void onPostExecute(String str) {
+            RegisterActivity1.instance.setClasses(result);
+        }
+    }
+
+    class CheckUsername extends AsyncTask<String, String, String> {
+        private JSONObject result;
+        private String username;
+
+        public CheckUsername(String username) {
+            this.username = username;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String, String> jsonParams = new HashMap<>();
+            jsonParams.put("user", username);
+
+            result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_username_exists.php", "GET", jsonParams);
+
+            return null;
+        }
+
+        protected void onPostExecute(String str) {
+            RegisterActivity1.instance.setUsernameTaken(result);
+        }
     }
 }

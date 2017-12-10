@@ -58,5 +58,6 @@
 
     <string name="error_not_logged_in">You are not logged in!</string>
     <string name="error_no_internet">You are not connected to the internet!\nPlease enable Wifi or mobile data</string>
+    <string name="username_taken">This username is already taken!</string>
 
 </resources>
