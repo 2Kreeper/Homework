@@ -52,15 +52,15 @@ public class DataInterchange {
     }
 
     public static String getPersistentString(String key) {
-        settings = LoginActivity.instance.getSharedPreferences(PREFS_NAME, 0);
+        settings = ToolbarActivity.instance.getSharedPreferences(PREFS_NAME, 0);
         return settings.getString(key, "");
     }
     public static int getPersistentInt(String key) {
-        settings = LoginActivity.instance.getSharedPreferences(PREFS_NAME, 0);
+        settings = ToolbarActivity.instance.getSharedPreferences(PREFS_NAME, 0);
         return settings.getInt(key, 0);
     }
     public static boolean getPersistentBoolean(String key) {
-        settings = LoginActivity.instance.getSharedPreferences(PREFS_NAME, 0);
+        settings = ToolbarActivity.instance.getSharedPreferences(PREFS_NAME, 0);
         return settings.getBoolean(key, false);
     }
 }

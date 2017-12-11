@@ -17,25 +17,40 @@
         ></include>
 
     <TextView
-        android:id="@+id/homeworkCreator"
+        android:id="@+id/homeworkMedia"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/homeworkUntil"
-        android:layout_marginTop="62dp"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="50dp"
         android:text="@string/loading"
         android:textAlignment="center"
         android:textSize="24sp" />
 
-    <Button
-        android:id="@+id/homeworkFlag"
+    <TextView
+        android:id="@+id/homeworkPage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/homeworkDone"
-        android:layout_alignBottom="@+id/homeworkDone"
         android:layout_alignParentEnd="true"
-        android:text="@string/flag" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/homeworkMedia"
+        android:layout_marginTop="50dp"
+        android:text="@string/loading"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/homeworkUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/homeworkPage"
+        android:layout_marginTop="50dp"
+        android:text="@string/loading"
+        android:textAlignment="center"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/homeworkUntil"
@@ -43,8 +58,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/homeworkMedia"
-        android:layout_marginTop="34dp"
+        android:layout_below="@+id/homeworkUser"
+        android:layout_marginTop="50dp"
         android:text="@string/loading"
         android:textAlignment="center"
         android:textSize="24sp" />
@@ -59,28 +74,13 @@
         android:layout_toStartOf="@+id/homeworkFlag"
         android:text="@string/done" />
 
-    <TextView
-        android:id="@+id/homeworkUntil"
+    <Button
+        android:id="@+id/homeworkFlag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/homeworkDone"
+        android:layout_alignBottom="@+id/homeworkDone"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/homeworkCreator"
-        android:layout_marginTop="36dp"
-        android:text="@string/loading"
-        android:textAlignment="center"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/homeworkMedia"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/toolbar"
-        android:layout_marginTop="50dp"
-        android:text="@string/loading"
-        android:textAlignment="center"
-        android:textSize="24sp" />
+        android:text="@string/flag" />
 
 </RelativeLayout>

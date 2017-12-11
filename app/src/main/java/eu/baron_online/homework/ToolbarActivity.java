@@ -12,7 +12,10 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -32,6 +35,7 @@ public class ToolbarActivity extends AppCompatActivity {
     protected ProgressDialog progressDialog;
     protected static NotificationManager mNotificationManager;
 
+    protected FirebaseAnalytics firebaseAnalytics;
     private int[] menuIgnoreArray = {};
 
     @Override
@@ -41,6 +45,7 @@ public class ToolbarActivity extends AppCompatActivity {
         instance = this;
 
         mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         //init ProgressDialog
         progressDialog = new ProgressDialog(this);
@@ -54,6 +59,10 @@ public class ToolbarActivity extends AppCompatActivity {
             DataInterchange.addValue("username", DataInterchange.getPersistentString("username"));
             DataInterchange.addValue("password", DataInterchange.getPersistentString("password"));
         }
+    }
+
+    protected void setToolbarTitle(String title) {
+        ((TextView) ((Toolbar) findViewById(R.id.toolbar)).findViewById(R.id.toolbar_title)).setText(title);
     }
 
     protected void setLoading(boolean loading) {

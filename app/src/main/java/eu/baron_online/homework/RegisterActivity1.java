@@ -47,7 +47,7 @@ public class RegisterActivity1 extends ToolbarActivity {
         DataInterchange.addValue("emptyToolbar", true);
         //set actionbar
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.register_toolbar));
+        setToolbarTitle(getResources().getString(R.string.register_toolbar));
         //remove unwanted options
         int[] ignoreArray = {R.id.action_logout, R.id.action_search, R.id.action_settings};
         DataInterchange.addValue("actionbar_ignore", ignoreArray);

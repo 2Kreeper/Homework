@@ -49,7 +49,7 @@ public class CreateEntryActivity extends ToolbarActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.create_entry));
+        setToolbarTitle(getResources().getString(R.string.create_entry));
         //remove unwanted options
         int[] ignoreArray = {R.id.action_search};
         DataInterchange.addValue("actionbar_ignore", ignoreArray);

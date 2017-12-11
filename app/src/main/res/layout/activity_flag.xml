@@ -18,7 +18,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/toolbar"
         android:layout_marginTop="50dp"
-        android:text="Buch"
+        android:text="@string/loading"
         android:textAlignment="center"
         android:textSize="24sp" />
 
@@ -30,19 +30,19 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/homeworkMedia"
         android:layout_marginTop="50dp"
-        android:text="Bis 30.12.2017"
+        android:text="@string/loading"
         android:textAlignment="center"
         android:textSize="24sp" />
 
     <TextView
-        android:id="@+id/homeworkCreator"
+        android:id="@+id/homeworkUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/homeworkUntil"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="50dp"
-        android:text="Von 2Kreeper"
+        android:text="@string/loading"
         android:textAlignment="center"
         android:textSize="24sp" />
 
@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/homeworkCreator"
+        android:layout_below="@+id/homeworkUser"
         android:layout_marginTop="50dp" />
 
     <include

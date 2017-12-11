@@ -19,9 +19,12 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
     public static HomeworkEntryDetailActivity instance;
 
-    private TextView subject, media, page, numbers, until;
+    private TextView media, page, numbers, until;
     private Button done, flag;
     private int showID;
+
+    private String subjectStr, mediaStr, pageStr, numbersStr, untilStr, uploadName;
+    private int uploadID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +48,8 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
         }
 
         media = (TextView) findViewById(R.id.homeworkMedia);
-        page = (TextView) findViewById(R.id.homeworkUntil);
-        numbers = (TextView) findViewById(R.id.homeworkCreator);
+        page = (TextView) findViewById(R.id.homeworkPage);
+        numbers = (TextView) findViewById(R.id.homeworkUser);
         until = (TextView) findViewById(R.id.homeworkUntil);
 
         setLoading(true);
@@ -65,8 +68,17 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
         flag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Implement flagging system
-                Toast.makeText(getApplicationContext(), "This is not implemented yet!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HomeworkEntryDetailActivity.instance, FlagActivity.class);
+                intent.putExtra("id", showID);
+                intent.putExtra("subject", subjectStr);
+                intent.putExtra("media", mediaStr);
+                intent.putExtra("page", pageStr);
+                intent.putExtra("numbers", numbersStr);
+                intent.putExtra("until", untilStr);
+                intent.putExtra("upload_id", uploadID);
+                intent.putExtra("upload_name", uploadName);
+
+                startActivity(intent);
             }
         });
     }
@@ -78,16 +90,25 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
                 startActivity(new Intent(this, LoginActivity.class));
                 finish();
             }*/
+            JSONObject entryData = result.getJSONObject("entry_data");
 
-            String untilStr = changeDateFormat(result.getString("UNTIL"), getResources().getString(R.string.server_date_format), getResources().getString(R.string.local_date_format));
+            String untilStr = changeDateFormat(entryData.getString("UNTIL"), getResources().getString(R.string.server_date_format), getResources().getString(R.string.local_date_format));
 
             //displaying results
-            getSupportActionBar().setTitle(result.getString("SUBJECT"));
-            media.setText(result.getString("MEDIA"));
-            page.setText(String.format(getResources().getString(R.string.page_placeholder), result.getString("PAGE")));
-            numbers.setText(String.format(getResources().getString(R.string.numbers_placeholder), result.getString("NUMBERS")));
+            setToolbarTitle(entryData.getString("SUBJECT"));
+            media.setText(entryData.getString("MEDIA"));
+            page.setText(String.format(getResources().getString(R.string.page_placeholder), entryData.getString("PAGE")));
+            numbers.setText(String.format(getResources().getString(R.string.numbers_placeholder), entryData.getString("NUMBERS")));
             until.setText(String.format(getResources().getString(R.string.until_placeholder), untilStr));
 
+            //setting variables
+            subjectStr = entryData.getString("SUBJECT");
+            mediaStr = entryData.getString("MEDIA");
+            pageStr = entryData.getString("PAGE");
+            numbersStr = entryData.getString("NUMBERS");
+            this.untilStr = entryData.getString("UNTIL");
+            uploadID = entryData.getJSONObject("uploader_data").getInt("ID");
+            uploadName = entryData.getJSONObject("uploader_data").getString("USERNAME");
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {

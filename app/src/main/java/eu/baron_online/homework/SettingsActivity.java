@@ -18,7 +18,7 @@ public class SettingsActivity extends ToolbarActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //set actionbar
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getResources().getString(R.string.settings_toolbar));
+        setToolbarTitle(getResources().getString(R.string.settings_toolbar));
         //remove unwanted options
         int[] ignoreArray = {R.id.action_search, R.id.action_settings};
         DataInterchange.addValue("actionbar_ignore", ignoreArray);

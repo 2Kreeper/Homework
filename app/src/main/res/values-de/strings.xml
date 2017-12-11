@@ -3,7 +3,7 @@
     <string name="class_string">Klasse</string>
     <string name="create">Erstellen!</string>
     <string name="flag">Markieren!</string>
-    <string name="loading">Lade...</string>
+    <string name="loading">Lade…</string>
     <string name="media">Medium</string>
     <string name="page">Seite(n)</string>
     <string name="password">Passwort</string>
@@ -50,4 +50,10 @@
     <string name="course">Kurs</string>
     <string name="teacher">Lehrer</string>
     <string name="username_taken">Dieser Name ist bereits vergeben!</string>
+
+    <string-array name="flag_reasons">
+        <item>Falscher Inhalt</item>
+        <item>Beleidigend</item>
+        <item>Doppelt</item>
+    </string-array>
 </resources>

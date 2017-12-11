@@ -53,8 +53,6 @@ public class LoginActivity extends ToolbarActivity {
         setSupportActionBar(toolbar);
 
         final ActionBar ab = getSupportActionBar();
-        ab.setDisplayShowCustomEnabled(true); // enable overriding the default toolbar layout
-        ab.setDisplayShowTitleEnabled(false);
         //remove unwanted options
         int[] ignoreArray = {R.id.action_logout, R.id.action_search, R.id.action_settings};
         DataInterchange.addValue("actionbar_ignore", ignoreArray);
