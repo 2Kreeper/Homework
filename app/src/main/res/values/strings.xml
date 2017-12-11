@@ -52,7 +52,7 @@
     <string name="_continue">Continue</string>
     <string name="addCourse">Add a course</string>
     <string name="course">Course</string>
-    <string name="teacher">Teacher</string>
+    <string name="teacher">Teacher (short)</string>
     <string name="notification_new_homework_title">New homework in %1$s</string>
     <string name="notification_new_homework_text">Page(s) %2$s in the %1$s until %3$s</string>
 

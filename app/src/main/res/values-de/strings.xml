@@ -48,7 +48,7 @@
     <string name="_continue">Weiter</string>
     <string name="addCourse">Kurs hinzufügen</string>
     <string name="course">Kurs</string>
-    <string name="teacher">Lehrer</string>
+    <string name="teacher">Lehrer (Kürzel)</string>
     <string name="username_taken">Dieser Name ist bereits vergeben!</string>
 
     <string-array name="flag_reasons">
