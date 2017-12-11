@@ -35,7 +35,6 @@ public class ToolbarActivity extends AppCompatActivity {
     protected ProgressDialog progressDialog;
     protected static NotificationManager mNotificationManager;
 
-    protected FirebaseAnalytics firebaseAnalytics;
     private int[] menuIgnoreArray = {};
 
     @Override
@@ -45,7 +44,6 @@ public class ToolbarActivity extends AppCompatActivity {
         instance = this;
 
         mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         //init ProgressDialog
         progressDialog = new ProgressDialog(this);
@@ -63,6 +61,15 @@ public class ToolbarActivity extends AppCompatActivity {
 
     protected void setToolbarTitle(String title) {
         ((TextView) ((Toolbar) findViewById(R.id.toolbar)).findViewById(R.id.toolbar_title)).setText(title);
+    }
+
+    protected int findIndex(Object[] array, Object item) {
+        for(int i = 0; i < array.length; i++) {
+            if(array[i].equals(item)) {
+                return i;
+            }
+        }
+        return 0;
     }
 
     protected void setLoading(boolean loading) {
@@ -128,16 +135,20 @@ public class ToolbarActivity extends AppCompatActivity {
                 break;
 
             case R.id.action_logout:
-                DataInterchange.removePersisten("username");
-                DataInterchange.removePersisten("password");
-
-                startActivity(new Intent(this, LoginActivity.class));
-                finish();
+                logout();
                 break;
         }
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void logout() {
+        DataInterchange.removePersisten("username");
+        DataInterchange.removePersisten("password");
+
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 
     public static String sha256(String text) {

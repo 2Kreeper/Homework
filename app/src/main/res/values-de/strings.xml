@@ -56,4 +56,7 @@
         <item>Beleidigend</item>
         <item>Doppelt</item>
     </string-array>
+    <string name="account_data_wrong">Deine Login-Daten sind ungültig!</string>
+    <string name="error_internal">Ein interner Fehler ist aufgetreten! Der Entwickler ist bereits benachrichtigt</string>
+    <string name="error_already_flagged">Du hast diese Hausaufgabe schon markiert!</string>
 </resources>

@@ -65,5 +65,8 @@
         <item>Insulting</item>
         <item>Double</item>
     </string-array>
+    <string name="account_data_wrong">Your login data is invalid!</string>
+    <string name="error_internal">An internal error occured! The developer is already noticed</string>
+    <string name="error_already_flagged">You have already flagged this entry!</string>
 
 </resources>

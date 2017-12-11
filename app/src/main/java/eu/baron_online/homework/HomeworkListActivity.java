@@ -113,12 +113,6 @@ public class HomeworkListActivity extends ToolbarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(HomeworkListActivity.instance, CreateEntryActivity.class);
                 startActivity(intent);
-
-                Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Integer.toString(R.id.fab));
-                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Button pressed");
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "FAB pressed!");
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             }
         });
 
