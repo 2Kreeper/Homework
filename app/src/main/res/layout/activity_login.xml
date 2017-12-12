@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
@@ -12,8 +13,7 @@
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar"
-        ></include>
+        layout="@layout/toolbar"></include>
 
     <EditText
         android:id="@+id/loginUsernameInput"
@@ -24,8 +24,7 @@
         android:layout_marginTop="87dp"
         android:ems="10"
         android:hint="@string/username"
-        android:inputType="textPersonName"
-        android:text="2Kreeper" />
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/loginPasswordInput"
@@ -36,8 +35,7 @@
         android:layout_marginTop="49dp"
         android:ems="10"
         android:hint="@string/password"
-        android:inputType="textPassword"
-        android:text="password" />
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/loginButton"
