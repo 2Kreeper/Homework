@@ -28,16 +28,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class LoginActivity extends ToolbarActivity {
-
-    public static LoginActivity instance;
-
     private EditText username, password;
     private Button loginButton, registerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        LoginActivity.instance = this;
-
         super.onCreate(savedInstanceState);
 
         Log.d("baron-online.eu", "FCM Token: " + DataInterchange.getPersistentString("fcmtoken"));
@@ -158,7 +153,7 @@ public class LoginActivity extends ToolbarActivity {
 
         @Override
         protected void onPostExecute(String str) {
-            LoginActivity.instance.onRequestFinished(result);
+            onRequestFinished(result);
         }
     }
 

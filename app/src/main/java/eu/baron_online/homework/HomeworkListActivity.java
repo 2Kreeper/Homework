@@ -44,15 +44,12 @@ import java.util.List;
 
 public class HomeworkListActivity extends ToolbarActivity {
 
-    public static HomeworkListActivity instance;
-
     private ArrayList<String> listItems = new ArrayList<>();
     private ArrayList<Integer> listItemsIDs = new ArrayList<>();
     private ArrayList<Boolean> listItemsOutdated = new ArrayList<>();
 
     private ArrayAdapter<String> adapter;
 
-    private View actionbarView;
     private ListView lView;
     private FloatingActionButton fab;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -75,8 +72,6 @@ public class HomeworkListActivity extends ToolbarActivity {
         //remove unwanted options
         int[] ignoreArray = {R.id.action_search};
         DataInterchange.addValue("actionbar_ignore", ignoreArray);
-
-        actionbarView  = getWindow().getDecorView().findViewById(R.id.toolbar);
 
         lView = (ListView) findViewById(android.R.id.list);
         lView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -507,7 +502,7 @@ public class HomeworkListActivity extends ToolbarActivity {
         }
 
         protected void onPostExecute(String res) {
-            HomeworkListActivity.instance.setEntrys(result);
+            setEntrys(result);
         }
     }
 
@@ -531,7 +526,7 @@ public class HomeworkListActivity extends ToolbarActivity {
         }
 
         protected void onPostExecute(String res) {
-            HomeworkListActivity.instance.setSubjects(result);
+            setSubjects(result);
         }
     }
 }

@@ -17,8 +17,6 @@ import java.util.HashMap;
 
 public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
-    public static HomeworkEntryDetailActivity instance;
-
     private TextView media, page, numbers, until;
     private Button done, flag;
     private int showID;
@@ -28,8 +26,6 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        HomeworkEntryDetailActivity.instance = this;
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homework_entry_detail);
 
@@ -173,7 +169,7 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
         }
 
         protected void onPostExecute(String res) {
-            HomeworkEntryDetailActivity.instance.setEntry(result);
+            setEntry(result);
         }
     }
 
@@ -206,12 +202,12 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
         protected void onPostExecute(String str) {
             try {
                 if(result.getInt("success") == 1) {
-                    HomeworkEntryDetailActivity.instance.onEntryMarked();
+                    onEntryMarked();
                 } else {
-                    HomeworkEntryDetailActivity.instance.onEntryMarkFailed();
+                    onEntryMarkFailed();
                 }
             } catch (JSONException e) {
-                HomeworkEntryDetailActivity.instance.onEntryMarkFailed();
+                onEntryMarkFailed();
                 e.printStackTrace();
             }
         }

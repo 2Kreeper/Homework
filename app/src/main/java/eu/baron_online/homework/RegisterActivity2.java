@@ -1,10 +1,7 @@
 package eu.baron_online.homework;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.drawable.Icon;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -20,19 +17,13 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class RegisterActivity2 extends ToolbarActivity {
-
-    public static RegisterActivity2 instance;
-
     private AlertDialog dialog;
     private TableLayout userCoursesTable;
     private Button newCourseButton, registerButton;
@@ -40,8 +31,6 @@ public class RegisterActivity2 extends ToolbarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        RegisterActivity2.instance = this;
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_2);
 
@@ -219,7 +208,7 @@ public class RegisterActivity2 extends ToolbarActivity {
         }
 
         protected void onPostExecute(String str) {
-            RegisterActivity2.instance.onUserRegister(result);
+            onUserRegister(result);
         }
     }
 }

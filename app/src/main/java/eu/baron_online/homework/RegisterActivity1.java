@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RegisterActivity1 extends ToolbarActivity {
-
-    public static RegisterActivity1 instance;
     public String usernameText = "", passwordText = "", schoolText = "", classText = "";
 
     protected TextWatcher watcher;
@@ -37,8 +35,6 @@ public class RegisterActivity1 extends ToolbarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        RegisterActivity1.instance = this;
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_1);
 
@@ -188,7 +184,7 @@ public class RegisterActivity1 extends ToolbarActivity {
         }
 
         protected void onPostExecute(String str) {
-            RegisterActivity1.instance.setSchools(result);
+            setSchools(result);
         }
     }
 
@@ -205,7 +201,7 @@ public class RegisterActivity1 extends ToolbarActivity {
         }
 
         protected void onPostExecute(String str) {
-            RegisterActivity1.instance.setClasses(result);
+            setClasses(result);
         }
     }
 
@@ -228,7 +224,7 @@ public class RegisterActivity1 extends ToolbarActivity {
         }
 
         protected void onPostExecute(String str) {
-            RegisterActivity1.instance.setUsernameTaken(result);
+            setUsernameTaken(result);
         }
     }
 }
