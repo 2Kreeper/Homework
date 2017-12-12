@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
 import android.support.v7.app.AppCompatActivity;
@@ -13,9 +14,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
+import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 
 
 public class ToolbarActivity extends AppCompatActivity {
@@ -201,4 +202,62 @@ public class ToolbarActivity extends AppCompatActivity {
 
         return null;
     }
+
+    protected void makeHTTPRequest(String url, HashMap<String, String> params) {
+        new HTTPRequestor(url, params).execute();
+    }
+
+    protected void makeHTTPRequest(String url, HashMap<String, String> params, OnRequestFinishedListener postExecute) {
+        new HTTPRequestor(url, params, postExecute).execute();
+    }
+
+    interface OnRequestFinishedListener {
+        void onRequestFinished(JSONObject object);
+    }
+
+    private class HTTPRequestor extends AsyncTask<String, String, String> {
+        private JSONObject result;
+        private String url;
+        private HashMap<String, String> params;
+        private OnRequestFinishedListener listener = null;
+
+        public HTTPRequestor(String url, HashMap<String, String> params) {
+            this.url = url;
+            this.params = params;
+        }
+
+        public HTTPRequestor(String url, HashMap<String, String> params, OnRequestFinishedListener listener) {
+            this.url = url;
+            this.params = params;
+            this.listener = listener;
+        }
+
+        @Override
+        protected String doInBackground(String... strParams) {
+            result = JSONParser.makeHttpRequest(url, "GET", params);
+
+            return null;
+        }
+
+        protected void onPostExecute(String str) {
+            if(listener != null) {
+                listener.onRequestFinished(result);
+            }
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

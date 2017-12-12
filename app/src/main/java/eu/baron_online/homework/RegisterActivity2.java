@@ -59,7 +59,7 @@ public class RegisterActivity2 extends ToolbarActivity {
             @Override
             public void onClick(View v) {
                 if(tableContent.size() > 0) {
-                    new RegisterUser().execute();
+                    registerUser();
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "You have to enter at least one course!", Toast.LENGTH_LONG).show();
@@ -172,43 +172,25 @@ public class RegisterActivity2 extends ToolbarActivity {
         setLoading(false);
     }
 
-    private class RegisterUser extends AsyncTask<String, String, String> {
+    private void registerUser() {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("user", (String) DataInterchange.getValue("usernameText"));
+        params.put("pass", (String) DataInterchange.getValue("passwordText"));
+        params.put("school", (String) DataInterchange.getValue("schoolText"));
+        params.put("class", (String) DataInterchange.getValue("classText"));
+        params.put("token", DataInterchange.getPersistentString("fcmtoken"));
 
-        private JSONObject result;
+        for(String[] course : tableContent) {
+            params.put("cs_sub[]", course[0]);
+            params.put("cs_tcs[]", course[1]);
+        }
 
-        @Override
-        protected String doInBackground(String... params) {
-            /*List<NameValuePair> jsonParams = new ArrayList<>();
-            jsonParams.add(new BasicNameValuePair("user", (String) DataInterchange.getValue("usernameText")));
-            jsonParams.add(new BasicNameValuePair("pass", (String) DataInterchange.getValue("passwordText")));
-            jsonParams.add(new BasicNameValuePair("school", (String) DataInterchange.getValue("schoolText")));
-            jsonParams.add(new BasicNameValuePair("class", (String) DataInterchange.getValue("classText")));
-            jsonParams.add(new BasicNameValuePair("token", (String) DataInterchange.getPersistentString("fcmtoken")));
 
-            for(String[] course : tableContent) {
-                jsonParams.add(new BasicNameValuePair("cs_sub[]", course[0]));
-                jsonParams.add(new BasicNameValuePair("cs_tcs[]", course[1]));
-            }*/
-
-            HashMap<String, String> jsonParams = new HashMap<>();
-            jsonParams.put("user", (String) DataInterchange.getValue("usernameText"));
-            jsonParams.put("pass", (String) DataInterchange.getValue("passwordText"));
-            jsonParams.put("school", (String) DataInterchange.getValue("schoolText"));
-            jsonParams.put("class", (String) DataInterchange.getValue("classText"));
-            jsonParams.put("token", (String) DataInterchange.getPersistentString("fcmtoken"));
-
-            for(String[] course : tableContent) {
-                jsonParams.put("cs_sub[]", course[0]);
-                jsonParams.put("cs_tcs[]", course[1]);
+        makeHTTPRequest("http://baron-online.eu/services/homework_user_register.php", params, new OnRequestFinishedListener() {
+            @Override
+            public void onRequestFinished(JSONObject object) {
+                onUserRegister(object);
             }
-
-            result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_user_register.php", "GET", jsonParams);
-
-            return null;
-        }
-
-        protected void onPostExecute(String str) {
-            onUserRegister(result);
-        }
+        });
     }
 }

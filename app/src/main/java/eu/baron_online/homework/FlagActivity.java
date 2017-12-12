@@ -48,7 +48,17 @@ public class FlagActivity extends ToolbarActivity {
         flagID = startIntent.getIntExtra("id", 0);
 
         flagReasonSpinner = (Spinner) findViewById(R.id.homeworkFlagReason);
-        new GetFlagReasons().execute();
+
+        //get content for spinner
+        HashMap<String, String> params = new HashMap<>();
+        params.put("user", (String) DataInterchange.getValue("username"));
+        params.put("pass", (String) DataInterchange.getValue("password"));
+        makeHTTPRequest("http://baron-online.eu/services/homework_get_flag_reasons.php", params, new OnRequestFinishedListener() {
+            @Override
+            public void onRequestFinished(JSONObject object) {
+                setFlagReasonSpinnerItems(object);
+            }
+        });
 
         media = (TextView) findViewById(R.id.homeworkMedia);
         until = (TextView) findViewById(R.id.homeworkUntil);
@@ -68,7 +78,27 @@ public class FlagActivity extends ToolbarActivity {
         flagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new FlagEntry().execute();
+                //flag entry
+                HashMap<String, String> params = new HashMap<>();
+                params.put("user", (String) DataInterchange.getValue("username"));
+                params.put("pass", (String) DataInterchange.getValue("password"));
+                params.put("homework_id", Integer.toString(flagID));
+                params.put("flag_reason", Integer.toString(localizedTitleToFlagId(flagReasonSpinner.getSelectedItem().toString())));
+
+                makeHTTPRequest("http://baron-online.eu/services/homework_entry_flag.php", params, new OnRequestFinishedListener() {
+                    @Override
+                    public void onRequestFinished(JSONObject object) {
+                        try {
+                            if(object.getInt("success") == 1) {
+                                finish();
+                            } else {
+                                onFlagFailed(object.getInt("error_code"), object);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
         });
     }
@@ -82,7 +112,7 @@ public class FlagActivity extends ToolbarActivity {
 
                 reasons.add(flagIdToLocalizedTitle(item.getInt("ID")));
             }
-        } catch (JSONException e) {
+        } catch (JSONException | NullPointerException e) {
             e.printStackTrace();
         }
 
@@ -139,67 +169,6 @@ public class FlagActivity extends ToolbarActivity {
                 });
                 finish();
                 break;
-        }
-    }
-
-    class FlagEntry extends AsyncTask<String, String, String> {
-
-        JSONObject result;
-
-        @Override
-        protected String doInBackground(String... strings) {
-            HashMap<String, String> jsonParams = new HashMap<>();
-            jsonParams.put("user", (String) DataInterchange.getValue("username"));
-            jsonParams.put("pass", (String) DataInterchange.getValue("password"));
-            jsonParams.put("homework_id", Integer.toString(flagID));
-            jsonParams.put("flag_reason", Integer.toString(localizedTitleToFlagId(flagReasonSpinner.getSelectedItem().toString())));
-
-            result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_entry_flag.php", "GET", jsonParams);
-
-            return null;
-        }
-
-        protected void onPostExecute(String str) {
-            try {
-                if(result.getInt("success") == 1) {
-                    finish();
-                } else {
-                    onFlagFailed(result.getInt("error_code"), result);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    class GetFlagReasons extends AsyncTask<String, String, String> {
-
-        private JSONObject result;
-
-        @Override
-        protected String doInBackground(String... params) {
-            /*List<NameValuePair> jsonParams = new ArrayList<>();
-            jsonParams.add(new BasicNameValuePair("user", (String) DataInterchange.getValue("username")));
-            jsonParams.add(new BasicNameValuePair("pass", (String) DataInterchange.getValue("password")));
-            jsonParams.add(new BasicNameValuePair("homework_id", Integer.toString(homeworkID)));*/
-
-            HashMap<String, String> jsonParams = new HashMap<>();
-            jsonParams.put("user", (String) DataInterchange.getValue("username"));
-            jsonParams.put("pass", (String) DataInterchange.getValue("password"));
-
-            result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_get_flag_reasons.php", "GET", jsonParams);
-
-            return null;
-        }
-
-        protected void onPostExecute(String str) {
-            try {
-                if(result.getInt("success") == 1) {
-                    setFlagReasonSpinnerItems(result);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
         }
     }
 }

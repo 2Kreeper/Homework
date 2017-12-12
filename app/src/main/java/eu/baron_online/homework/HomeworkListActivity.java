@@ -44,6 +44,8 @@ import java.util.List;
 
 public class HomeworkListActivity extends ToolbarActivity {
 
+    public static HomeworkListActivity instance;
+
     private ArrayList<String> listItems = new ArrayList<>();
     private ArrayList<Integer> listItemsIDs = new ArrayList<>();
     private ArrayList<Boolean> listItemsOutdated = new ArrayList<>();
@@ -215,7 +217,15 @@ public class HomeworkListActivity extends ToolbarActivity {
     private void showFilterSubjectPopup() {
         this.setLoading(true);
         //make an http request, popup is displayed in result handling (setSubjects(JSONObject result))
-        new RequestSubjects().execute();
+        HashMap<String, String> params = new HashMap<>();
+        params.put("user", (String) DataInterchange.getValue("username"));
+        params.put("pass", (String) DataInterchange.getValue("password"));
+        makeHTTPRequest("http://baron-online.eu/services/homework_get_subjects.php", params, new OnRequestFinishedListener() {
+            @Override
+            public void onRequestFinished(JSONObject object) {
+                setSubjects(object);
+            }
+        });
     }
 
     private void showFilterDatePopup() {
@@ -346,9 +356,9 @@ public class HomeworkListActivity extends ToolbarActivity {
     protected void updateList() {
         clearList();
         if(filtered) {
-            new RequestEntrys(filterType, filterParam).execute();
+            requestEntrys(filterType, filterParam);
         } else {
-            new RequestEntrys().execute();
+            requestEntrys();
         }
     }
 
@@ -451,82 +461,33 @@ public class HomeworkListActivity extends ToolbarActivity {
         return arrayListToArray(listItemsIDs);
     }
 
-    public class RequestEntrys extends AsyncTask<String, String, String> {
-
-        private JSONObject result;
-
-        private boolean filtered;
-        private String filterType = "", filterParam = "";
-
-        public RequestEntrys() {
-            super();
-
-            filtered = false;
-        }
-
-        public RequestEntrys(String filterType, String filterParam) {
-            super();
-
-            filtered = true;
-            this.filterType = filterType;
-            this.filterParam = filterParam;
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            /*List<NameValuePair> jsonParams = new ArrayList<>();
-            jsonParams.add(new BasicNameValuePair("user", (String) DataInterchange.getValue("username")));
-            jsonParams.add(new BasicNameValuePair("pass", (String) DataInterchange.getValue("password")));
-            jsonParams.add(new BasicNameValuePair("sort_col", (String) DataInterchange.getPersistentString("sort_column")));
-            jsonParams.add(new BasicNameValuePair("sort_md", (String) DataInterchange.getPersistentString("sort_mode")));
-
-            if(filtered) {
-                jsonParams.add(new BasicNameValuePair("filter", "true"));
-                jsonParams.add(new BasicNameValuePair(filterType, filterParam));
-            }*/
-
-            HashMap<String, String> jsonParams = new HashMap<>();
-            jsonParams.put("user", (String) DataInterchange.getValue("username"));
-            jsonParams.put("pass", (String) DataInterchange.getValue("password"));
-            jsonParams.put("sort_col", (String) DataInterchange.getPersistentString("sort_column"));
-            jsonParams.put("sort_md", (String) DataInterchange.getPersistentString("sort_mode"));
-
-            if(filtered) {
-                jsonParams.put("filter", "true");
-                jsonParams.put(filterType, filterParam);
+    private void requestEntrys() {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("user", (String) DataInterchange.getValue("username"));
+        params.put("pass", (String) DataInterchange.getValue("password"));
+        params.put("sort_col", DataInterchange.getPersistentString("sort_column"));
+        params.put("sort_md", DataInterchange.getPersistentString("sort_mode"));
+        makeHTTPRequest("http://baron-online.eu/services/homework_get_all.php", params, new OnRequestFinishedListener() {
+            @Override
+            public void onRequestFinished(JSONObject object) {
+                setEntrys(object);
             }
-
-            result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_get_all.php", "GET", jsonParams);
-
-            return null;
-        }
-
-        protected void onPostExecute(String res) {
-            setEntrys(result);
-        }
+        });
     }
 
-    public class RequestSubjects extends AsyncTask<String, String, String> {
-
-        private JSONObject result;
-
-        @Override
-        protected String doInBackground(String... params) {
-            /*List<NameValuePair> jsonParams = new ArrayList<>();
-            jsonParams.add(new BasicNameValuePair("user", (String) DataInterchange.getValue("username")));
-            jsonParams.add(new BasicNameValuePair("pass", (String) DataInterchange.getValue("password")));*/
-
-            HashMap<String, String> jsonParams = new HashMap<>();
-            jsonParams.put("user", (String) DataInterchange.getValue("username"));
-            jsonParams.put("pass", (String) DataInterchange.getValue("password"));
-
-            result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_get_subjects.php", "GET", jsonParams);
-
-            return null;
-        }
-
-        protected void onPostExecute(String res) {
-            setSubjects(result);
-        }
+    private void requestEntrys(String filterType, String filterParam) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("user", (String) DataInterchange.getValue("username"));
+        params.put("pass", (String) DataInterchange.getValue("password"));
+        params.put("sort_col", DataInterchange.getPersistentString("sort_column"));
+        params.put("sort_md", DataInterchange.getPersistentString("sort_mode"));
+        params.put("filter", "true");
+        params.put(filterType, filterParam);
+        makeHTTPRequest("http://baron-online.eu/services/homework_get_all.php", params, new OnRequestFinishedListener() {
+            @Override
+            public void onRequestFinished(JSONObject object) {
+                setEntrys(object);
+            }
+        });
     }
 }

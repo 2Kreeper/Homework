@@ -56,10 +56,20 @@ public class RegisterActivity1 extends ToolbarActivity {
         usernameTakenTextview = (TextView) findViewById(R.id.username_taken_textview);
 
         //init school autocomplete view: make HTTP-Request, results are used in setSchools(JSONObject response)
-        new GetSchools().execute();
+        makeHTTPRequest("http://baron-online.eu/services/homework_get_schools.php", new HashMap<String, String>(), new OnRequestFinishedListener() {
+            @Override
+            public void onRequestFinished(JSONObject object) {
+                setSchools(object);
+            }
+        });
 
         //init class autocomplete view: make HTTP-Request, results are used in setClasses(JSONObject response)
-        new GetClasses().execute();
+        makeHTTPRequest("http://baron-online.eu/services/homework_get_classes.php", new HashMap<String, String>(), new OnRequestFinishedListener() {
+            @Override
+            public void onRequestFinished(JSONObject object) {
+                setClasses(object);
+            }
+        });
 
         continueRegisterButton = (Button) findViewById(R.id.continueRegisterButton);
         continueRegisterButton.setOnClickListener(new View.OnClickListener() {
@@ -119,7 +129,15 @@ public class RegisterActivity1 extends ToolbarActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                new CheckUsername(s.toString()).execute();
+                HashMap<String, String> params = new HashMap<>();
+                params.put("user", s.toString());
+
+                makeHTTPRequest("http://baron-online.eu/services/homework_username_exists.php", params, new OnRequestFinishedListener() {
+                    @Override
+                    public void onRequestFinished(JSONObject object) {
+                        setUsernameTaken(object);
+                    }
+                });
             }
         });
     }
@@ -168,63 +186,6 @@ public class RegisterActivity1 extends ToolbarActivity {
             e.printStackTrace();
         } finally {
             watcher.afterTextChanged(null);
-        }
-    }
-
-    class GetSchools extends AsyncTask<String, String, String> {
-        private JSONObject result;
-
-        @Override
-        protected String doInBackground(String... params) {
-            HashMap<String, String> jsonParams = new HashMap<>();
-
-            result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_get_schools.php", "GET", jsonParams);
-
-            return null;
-        }
-
-        protected void onPostExecute(String str) {
-            setSchools(result);
-        }
-    }
-
-    class GetClasses extends AsyncTask<String, String, String> {
-        private JSONObject result;
-
-        @Override
-        protected String doInBackground(String... params) {
-            HashMap<String, String> jsonParams = new HashMap<>();
-
-            result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_get_classes.php", "GET", jsonParams);
-
-            return null;
-        }
-
-        protected void onPostExecute(String str) {
-            setClasses(result);
-        }
-    }
-
-    class CheckUsername extends AsyncTask<String, String, String> {
-        private JSONObject result;
-        private String username;
-
-        public CheckUsername(String username) {
-            this.username = username;
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            HashMap<String, String> jsonParams = new HashMap<>();
-            jsonParams.put("user", username);
-
-            result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_username_exists.php", "GET", jsonParams);
-
-            return null;
-        }
-
-        protected void onPostExecute(String str) {
-            setUsernameTaken(result);
         }
     }
 }

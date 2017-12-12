@@ -3,7 +3,6 @@ package eu.baron_online.homework;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -18,18 +17,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 public class CreateEntryActivity extends ToolbarActivity {
 
@@ -59,7 +51,22 @@ public class CreateEntryActivity extends ToolbarActivity {
             @Override
             public void onClick(View v) {
                 setLoading(true);
-                new CreateEntry().execute();
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("user", (String) DataInterchange.getValue("username"));
+                params.put("pass", (String) DataInterchange.getValue("password"));
+                params.put("subject", subjectStr);
+                params.put("media", mediaStr);
+                params.put("page", pageStr);
+                params.put("numbers", numbersStr);
+                params.put("until", changeDateFormat(untilStr, getResources().getString(R.string.local_date_format), getResources().getString(R.string.server_date_format)));
+                params.put("class_id", (String) DataInterchange.getValue("class_id"));
+                makeHTTPRequest("http://baron-online.eu/services/homework_entry_create.php", params, new OnRequestFinishedListener() {
+                    @Override
+                    public void onRequestFinished(JSONObject object) {
+                        onEntryCreate(object);
+                    }
+                });
             }
         });
 
@@ -161,42 +168,5 @@ public class CreateEntryActivity extends ToolbarActivity {
             e.printStackTrace();
         }
         setLoading(false);
-    }
-
-    class CreateEntry extends AsyncTask<String, String, String> {
-
-        private JSONObject result;
-
-        @Override
-        protected String doInBackground(String... params) {
-            /*List<NameValuePair> jsonParams = new ArrayList<NameValuePair>();
-            jsonParams.add(new BasicNameValuePair("user", (String) DataInterchange.getValue("username")));
-            jsonParams.add(new BasicNameValuePair("pass", (String) DataInterchange.getValue("password")));
-            jsonParams.add(new BasicNameValuePair("subject", subjectStr));
-            jsonParams.add(new BasicNameValuePair("media", mediaStr));
-            jsonParams.add(new BasicNameValuePair("page", pageStr));
-            jsonParams.add(new BasicNameValuePair("numbers", numbersStr));
-            jsonParams.add(new BasicNameValuePair("until", untilStr));
-            jsonParams.add(new BasicNameValuePair("class_id", (String) DataInterchange.getValue("class_id")));*/
-
-            HashMap<String, String> jsonParams = new HashMap<>();
-            jsonParams.put("user", (String) DataInterchange.getValue("username"));
-            jsonParams.put("pass", (String) DataInterchange.getValue("password"));
-            jsonParams.put("subject", subjectStr);
-            jsonParams.put("media", mediaStr);
-            jsonParams.put("page", pageStr);
-            jsonParams.put("numbers", numbersStr);
-            jsonParams.put("until", changeDateFormat(untilStr, getResources().getString(R.string.local_date_format), getResources().getString(R.string.server_date_format)));
-            jsonParams.put("class_id", (String) DataInterchange.getValue("class_id"));
-
-            Log.v("baron-online.eu", "Creating new entry until " + untilStr);
-            result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_entry_create.php", "GET", jsonParams);
-
-            return null;
-        }
-
-        protected void onPostExecute(String str) {
-            CreateEntryActivity.instance.onEntryCreate(result);
-        }
     }
 }

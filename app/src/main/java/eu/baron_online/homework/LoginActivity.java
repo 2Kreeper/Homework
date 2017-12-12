@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class LoginActivity extends ToolbarActivity {
+public class LoginActivity extends ToolbarActivity implements ToolbarActivity.OnRequestFinishedListener {
     private EditText username, password;
     private Button loginButton, registerButton;
 
@@ -39,7 +39,9 @@ public class LoginActivity extends ToolbarActivity {
 
         //check if user is already logged in
         if(DataInterchange.existsPersistent("username") && DataInterchange.existsPersistent("password")) {
-            new CheckForUser().execute(DataInterchange.getPersistentString("username"), DataInterchange.getPersistentString("password"));
+            //new CheckForUser().execute(DataInterchange.getPersistentString("username"), DataInterchange.getPersistentString("password"));
+
+            checkForUser(DataInterchange.getPersistentString("username"), DataInterchange.getPersistentString("password"));
         }
 
         setContentView(R.layout.activity_login);
@@ -47,7 +49,6 @@ public class LoginActivity extends ToolbarActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final ActionBar ab = getSupportActionBar();
         //remove unwanted options
         int[] ignoreArray = {R.id.action_logout, R.id.action_search, R.id.action_settings};
         DataInterchange.addValue("actionbar_ignore", ignoreArray);
@@ -68,7 +69,7 @@ public class LoginActivity extends ToolbarActivity {
                     toast.show();
                 } else {
                     setLoading(true);
-                    new CheckForUser().execute(username.getText().toString(), sha256(password.getText().toString()));
+                    checkForUser(username.getText().toString(), sha256(password.getText().toString()));
                 }
             }
         });
@@ -82,6 +83,14 @@ public class LoginActivity extends ToolbarActivity {
         });
     }
 
+    private void checkForUser(String username, String password) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("user", username);
+        params.put("pass", password);
+        makeHTTPRequest("http://baron-online.eu/services/homework_user_exists.php", params, this);
+    }
+
+    @Override
     public void onRequestFinished(JSONObject result) {
         try {
             boolean userExists = result.getInt("success") == 1;
@@ -98,7 +107,12 @@ public class LoginActivity extends ToolbarActivity {
                 DataInterchange.addPersistent("username", userInfo.getString("USERNAME"));
                 DataInterchange.addPersistent("password", userInfo.getString("PASSWORD"));
 
-                new UpdateUserToken().execute(userInfo.getString("USERNAME"), userInfo.getString("PASSWORD"));
+                //update token
+                HashMap<String, String> params = new HashMap<>();
+                params.put("user", userInfo.getString("USERNAME"));
+                params.put("pass", userInfo.getString("PASSWORD"));
+                params.put("new_token", FirebaseInstanceId.getInstance().getToken());
+                makeHTTPRequest("http://baron-online.eu/services/homework_user_update_token.php", params);
 
                 //start activity and kill old one
                 Intent intent = new Intent(this, HomeworkListActivity.class);
@@ -107,12 +121,7 @@ public class LoginActivity extends ToolbarActivity {
             } else {
                 password.setText("");
 
-                Context context = getApplicationContext();
-                CharSequence text = "This data is invalid!";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.account_data_wrong), Toast.LENGTH_LONG).show();
             }
         } catch (JSONException e) {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -128,55 +137,5 @@ public class LoginActivity extends ToolbarActivity {
         }
 
         setLoading(false);
-    }
-
-    class CheckForUser extends AsyncTask<String, String, String> {
-
-        private JSONObject result;
-
-        @Override
-        protected String doInBackground(String... params) {
-            String username = params[0], password = params[1];
-
-            /*List<NameValuePair> jsonParams = new ArrayList<NameValuePair>();
-            jsonParams.add(new BasicNameValuePair("user", username));
-            jsonParams.add(new BasicNameValuePair("pass", password));*/
-
-            HashMap<String, String> jsonParams = new HashMap<>();
-            jsonParams.put("user", username);
-            jsonParams.put("pass", password);
-
-            result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_user_exists.php", "GET", jsonParams);
-
-            return "";
-        }
-
-        @Override
-        protected void onPostExecute(String str) {
-            onRequestFinished(result);
-        }
-    }
-
-    class UpdateUserToken extends AsyncTask<String, String, String>{
-        private JSONObject result;
-
-        @Override
-        protected String doInBackground(String... params) {
-            String username = params[0], password = params[1];
-
-            /*List<NameValuePair> jsonParams = new ArrayList<NameValuePair>();
-            jsonParams.add(new BasicNameValuePair("user", username));
-            jsonParams.add(new BasicNameValuePair("pass", password));
-            jsonParams.add(new BasicNameValuePair("new_token", FirebaseInstanceId.getInstance().getToken()));*/
-
-            HashMap<String, String> jsonParams = new HashMap<>();
-            jsonParams.put("user", username);
-            jsonParams.put("pass", password);
-            jsonParams.put("new_token", FirebaseInstanceId.getInstance().getToken());
-
-            result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_user_update_token.php", "GET", jsonParams);
-
-            return "";
-        }
     }
 }

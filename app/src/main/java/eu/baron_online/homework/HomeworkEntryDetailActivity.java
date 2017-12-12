@@ -48,15 +48,43 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
         numbers = (TextView) findViewById(R.id.homeworkUser);
         until = (TextView) findViewById(R.id.homeworkUntil);
 
+        //mark entry as done
         setLoading(true);
-        new RequestEntry(showID).execute();
+        HashMap<String, String> params = new HashMap<>();
+        params.put("user", (String) DataInterchange.getValue("username"));
+        params.put("pass", (String) DataInterchange.getValue("password"));
+        params.put("id", Integer.toString(showID));
+        makeHTTPRequest("http://baron-online.eu/services/homework_get_entry.php", params, new OnRequestFinishedListener() {
+            @Override
+            public void onRequestFinished(JSONObject object) {
+                setEntry(object);
+            }
+        });
 
         done = (Button) findViewById(R.id.homeworkDone);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setLoading(true);
-                new MarkEntryDone(showID).execute();
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("user", (String) DataInterchange.getValue("username"));
+                params.put("pass", (String) DataInterchange.getValue("password"));
+                params.put("homework_id", Integer.toString(showID));
+                makeHTTPRequest("http://baron-online.eu/services/homework_entry_done.php", params, new OnRequestFinishedListener() {
+                    @Override
+                    public void onRequestFinished(JSONObject object) {
+                        try {
+                            if(object.getInt("success") == 1) {
+                                onEntryMarked();
+                            } else {
+                                onEntryMarkFailed();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
         });
 
@@ -81,11 +109,6 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
     public void setEntry(JSONObject result) {
         try {
-            /*if(result.getInt("success") == 0) {
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_not_logged_in), Toast.LENGTH_SHORT);
-                startActivity(new Intent(this, LoginActivity.class));
-                finish();
-            }*/
             JSONObject entryData = result.getJSONObject("entry_data");
 
             String untilStr = changeDateFormat(entryData.getString("UNTIL"), getResources().getString(R.string.server_date_format), getResources().getString(R.string.local_date_format));
@@ -139,77 +162,6 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
     private void tryKillNotification(int id) {
         if(notificationExists(id)) {
             mNotificationManager.cancel(id);
-        }
-    }
-
-    class RequestEntry extends AsyncTask<String, String, String> {
-
-        private JSONObject result;
-        private int id;
-
-        public RequestEntry(int id) {
-            this.id = id;
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            /*List<NameValuePair> jsonParams = new ArrayList<>();
-            jsonParams.add(new BasicNameValuePair("user", (String) DataInterchange.getValue("username")));
-            jsonParams.add(new BasicNameValuePair("pass", (String) DataInterchange.getValue("password")));
-            jsonParams.add(new BasicNameValuePair("id", Integer.toString(this.id)));*/
-
-            HashMap<String, String> jsonParams = new HashMap<>();
-            jsonParams.put("user", (String) DataInterchange.getValue("username"));
-            jsonParams.put("pass", (String) DataInterchange.getValue("password"));
-            jsonParams.put("id", Integer.toString(this.id));
-
-            result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_get_entry.php", "GET", jsonParams);
-
-            return null;
-        }
-
-        protected void onPostExecute(String res) {
-            setEntry(result);
-        }
-    }
-
-    class MarkEntryDone extends AsyncTask<String, String, String> {
-
-        private int homeworkID;
-        private JSONObject result;
-
-        public MarkEntryDone(int homeworkID) {
-            this.homeworkID = homeworkID;
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            /*List<NameValuePair> jsonParams = new ArrayList<>();
-            jsonParams.add(new BasicNameValuePair("user", (String) DataInterchange.getValue("username")));
-            jsonParams.add(new BasicNameValuePair("pass", (String) DataInterchange.getValue("password")));
-            jsonParams.add(new BasicNameValuePair("homework_id", Integer.toString(homeworkID)));*/
-
-            HashMap<String, String> jsonParams = new HashMap<>();
-            jsonParams.put("user", (String) DataInterchange.getValue("username"));
-            jsonParams.put("pass", (String) DataInterchange.getValue("password"));
-            jsonParams.put("homework_id", Integer.toString(homeworkID));
-
-            result = JSONParser.makeHttpRequest("http://baron-online.eu/services/homework_entry_done.php", "GET", jsonParams);
-
-            return null;
-        }
-
-        protected void onPostExecute(String str) {
-            try {
-                if(result.getInt("success") == 1) {
-                    onEntryMarked();
-                } else {
-                    onEntryMarkFailed();
-                }
-            } catch (JSONException e) {
-                onEntryMarkFailed();
-                e.printStackTrace();
-            }
         }
     }
 }
