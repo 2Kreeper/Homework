@@ -1,6 +1,7 @@
 package eu.baron_online.homework;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,16 +13,22 @@ import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.firebase.crash.FirebaseCrash;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.HashMap;
+
+import eu.baron_online.homework.exception.MySQLException;
 
 public class CreateEntryActivity extends ToolbarActivity {
 
@@ -138,8 +145,15 @@ public class CreateEntryActivity extends ToolbarActivity {
                             until.setText(untilString);
                             until.clearFocus();
 
+                            View view = getCurrentFocus();
+                            if (view != null) {
+                                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                            }
+
                             //manually call TextChangeEvent
                             watcher.afterTextChanged(new SpannableStringBuilder());
+
                         }
                     }, year, month - 1, day);
                     dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
@@ -162,7 +176,16 @@ public class CreateEntryActivity extends ToolbarActivity {
                 HomeworkListActivity.instance.updateList();
                 finish();
             } else {
-                Toast.makeText(getApplicationContext(), "An error occured:\n" + result.getString("message"), Toast.LENGTH_LONG);
+                switch(result.getInt("error_code")) {
+                    case 2: //mysql error
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_internal), Toast.LENGTH_LONG).show();
+                        FirebaseCrash.report(new MySQLException(result.getString("message")));
+                        finish();
+                        break;
+                    case 4: //user is not in this course
+                        Toast.makeText(getApplicationContext(), String.format(getResources().getString(R.string.error_not_in_course), result.getJSONObject("request_info").getString("subject")), Toast.LENGTH_LONG).show();
+                        break;
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
