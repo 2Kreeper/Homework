@@ -176,13 +176,13 @@ public class CreateEntryActivity extends ToolbarActivity {
                 HomeworkListActivity.instance.updateList();
                 finish();
             } else {
-                switch(result.getInt("error_code")) {
-                    case 2: //mysql error
+                switch(getErrorCode(result.getInt("error_code"))) {
+                    case MYSQL_ERROR: //mysql error
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_internal), Toast.LENGTH_LONG).show();
                         FirebaseCrash.report(new MySQLException(result.getString("message")));
                         finish();
                         break;
-                    case 4: //user is not in this course
+                    case MISSING_PERMISSION: //user is not in this course
                         Toast.makeText(getApplicationContext(), String.format(getResources().getString(R.string.error_not_in_course), result.getJSONObject("request_info").getString("subject")), Toast.LENGTH_LONG).show();
                         break;
                 }
@@ -191,5 +191,12 @@ public class CreateEntryActivity extends ToolbarActivity {
             e.printStackTrace();
         }
         setLoading(false);
+    }
+
+    @Override
+    protected void onNoConnection() {
+        super.onNoConnection();
+        setLoading(false);
+        finish();
     }
 }

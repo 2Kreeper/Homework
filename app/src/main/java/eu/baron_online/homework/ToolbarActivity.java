@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -204,11 +205,50 @@ public class ToolbarActivity extends AppCompatActivity {
     }
 
     protected void makeHTTPRequest(String url, HashMap<String, String> params) {
-        new HTTPRequestor(url, params).execute();
+        makeHTTPRequest(url, params, true);
     }
 
     protected void makeHTTPRequest(String url, HashMap<String, String> params, OnRequestFinishedListener postExecute) {
-        new HTTPRequestor(url, params, postExecute).execute();
+        makeHTTPRequest(url, params, postExecute, true);
+    }
+
+    protected void makeHTTPRequest(String url, HashMap<String, String> params, boolean handleNoInternet) {
+        new HTTPRequestor(url, params, handleNoInternet).execute();
+    }
+
+    protected void makeHTTPRequest(String url, HashMap<String, String> params, OnRequestFinishedListener postExecute, boolean handleNoInternet) {
+        new HTTPRequestor(url, params, postExecute, handleNoInternet).execute();
+    }
+
+    protected ErrorCode getErrorCode(int code) {
+        switch(code) {
+            case 1:
+                return ErrorCode.INVALID_LOGIN;
+            case 2:
+                return ErrorCode.MYSQL_ERROR;
+            case 3:
+                return ErrorCode.ACTION_ALREADY_PERFORMED;
+            case 4:
+                return ErrorCode.MISSING_PERMISSION;
+            case 5:
+                return ErrorCode.MISSING_PARAMETER;
+            case 6:
+                return ErrorCode.INVALID_PARAMETER;
+            case 7:
+                return ErrorCode.NO_ROWS_RETURNED;
+            default:
+                return null;
+        }
+    }
+
+    protected void onNoConnection() {
+        Log.w("baron-online.eu", "No internet!");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_no_internet), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     interface OnRequestFinishedListener {
@@ -220,16 +260,19 @@ public class ToolbarActivity extends AppCompatActivity {
         private String url;
         private HashMap<String, String> params;
         private OnRequestFinishedListener listener = null;
+        private boolean handleNoInternet;
 
-        public HTTPRequestor(String url, HashMap<String, String> params) {
+        public HTTPRequestor(String url, HashMap<String, String> params, boolean handleNoInternet) {
             this.url = url;
             this.params = params;
+            this.handleNoInternet = handleNoInternet;
         }
 
-        public HTTPRequestor(String url, HashMap<String, String> params, OnRequestFinishedListener listener) {
+        public HTTPRequestor(String url, HashMap<String, String> params, OnRequestFinishedListener listener, boolean handleNoInternet) {
             this.url = url;
             this.params = params;
             this.listener = listener;
+            this.handleNoInternet = handleNoInternet;
         }
 
         @Override
@@ -240,10 +283,16 @@ public class ToolbarActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String str) {
-            if(listener != null) {
+            if(listener != null && (result != null || !handleNoInternet)) {
                 listener.onRequestFinished(result);
+            } else if(result == null && handleNoInternet) {
+                onNoConnection();
             }
         }
+    }
+
+    protected enum ErrorCode {
+        INVALID_LOGIN, MYSQL_ERROR, ACTION_ALREADY_PERFORMED, MISSING_PERMISSION, MISSING_PARAMETER, INVALID_PARAMETER, NO_ROWS_RETURNED
     }
 }
 

@@ -134,8 +134,8 @@ public class FlagActivity extends ToolbarActivity {
     }
 
     protected void onFlagFailed(int errorCode, JSONObject object) {
-        switch(errorCode) {
-            case 1:
+        switch(getErrorCode(errorCode)) {
+            case INVALID_LOGIN:
                 ToolbarActivity.instance.runOnUiThread(new Runnable(){
                     @Override
                     public void run(){
@@ -145,7 +145,7 @@ public class FlagActivity extends ToolbarActivity {
                 FirebaseCrash.report(new LoginException("Username: \"" + DataInterchange.getPersistentString("username") + "\" Password: \"" + DataInterchange.getPersistentString("password") + "\""));
                 logout();
                 break;
-            case 2:
+            case MYSQL_ERROR:
                 ToolbarActivity.instance.runOnUiThread(new Runnable(){
                     @Override
                     public void run(){
@@ -153,14 +153,14 @@ public class FlagActivity extends ToolbarActivity {
                     }
                 });
                 try {
-                    FirebaseCrash.report(new MySQLException(object.getString("message")));
+                    FirebaseCrash.report(new MySQLException(object.getString("error")));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } finally {
                     finish();
                 }
                 break;
-            case 3:
+            case ACTION_ALREADY_PERFORMED:
                 ToolbarActivity.instance.runOnUiThread(new Runnable(){
                     @Override
                     public void run(){

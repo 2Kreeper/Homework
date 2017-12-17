@@ -159,15 +159,6 @@ public class RegisterActivity2 extends ToolbarActivity {
             }
         } catch (JSONException e) {
             e.printStackTrace();
-        }  catch (NullPointerException e) {
-            //show toast in UI thread
-            ToolbarActivity.instance.runOnUiThread(new Runnable(){
-                @Override
-                public void run(){
-                    Toast.makeText(ToolbarActivity.instance, ToolbarActivity.instance.getResources().getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
-                }
-            });
-            e.printStackTrace();
         }
         setLoading(false);
     }
@@ -192,5 +183,11 @@ public class RegisterActivity2 extends ToolbarActivity {
                 onUserRegister(object);
             }
         });
+    }
+
+    @Override
+    protected void onNoConnection() {
+        super.onNoConnection();
+        setLoading(false);
     }
 }

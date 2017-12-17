@@ -1,5 +1,6 @@
 package eu.baron_online.homework;
 
+import android.app.ApplicationErrorReport;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.text.TextWatcher;
 import android.widget.TextView;
+
+import com.google.firebase.crash.FirebaseCrash;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,7 +64,7 @@ public class RegisterActivity1 extends ToolbarActivity {
             public void onRequestFinished(JSONObject object) {
                 setSchools(object);
             }
-        });
+        }, false);
 
         //init class autocomplete view: make HTTP-Request, results are used in setClasses(JSONObject response)
         makeHTTPRequest("http://baron-online.eu/services/homework_get_classes.php", new HashMap<String, String>(), new OnRequestFinishedListener() {
@@ -69,7 +72,7 @@ public class RegisterActivity1 extends ToolbarActivity {
             public void onRequestFinished(JSONObject object) {
                 setClasses(object);
             }
-        });
+        }, false);
 
         continueRegisterButton = (Button) findViewById(R.id.continueRegisterButton);
         continueRegisterButton.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +140,7 @@ public class RegisterActivity1 extends ToolbarActivity {
                     public void onRequestFinished(JSONObject object) {
                         setUsernameTaken(object);
                     }
-                });
+                }, false);
             }
         });
     }
@@ -153,8 +156,8 @@ public class RegisterActivity1 extends ToolbarActivity {
 
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_expandable_list_item_1, schools);
             schoolField.setAdapter(adapter);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (JSONException | NullPointerException e) {
+            FirebaseCrash.report(e);
         }
     }
 
@@ -169,8 +172,8 @@ public class RegisterActivity1 extends ToolbarActivity {
 
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_expandable_list_item_1, classes);
             classField.setAdapter(adapter);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (JSONException | NullPointerException e) {
+            FirebaseCrash.report(e);
         }
     }
 
@@ -182,8 +185,8 @@ public class RegisterActivity1 extends ToolbarActivity {
             } else {
                 usernameTakenTextview.setVisibility(TextView.INVISIBLE);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (JSONException | NullPointerException e) {
+            FirebaseCrash.report(e);
         } finally {
             watcher.afterTextChanged(null);
         }

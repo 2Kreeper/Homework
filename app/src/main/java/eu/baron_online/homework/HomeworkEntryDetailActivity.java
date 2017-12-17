@@ -10,10 +10,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.crash.FirebaseCrash;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+
+import eu.baron_online.homework.exception.MySQLException;
 
 public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
@@ -109,25 +113,49 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
 
     public void setEntry(JSONObject result) {
         try {
-            JSONObject entryData = result.getJSONObject("entry_data");
+            if(result.getInt("success") == 1) {
 
-            String untilStr = changeDateFormat(entryData.getString("UNTIL"), getResources().getString(R.string.server_date_format), getResources().getString(R.string.local_date_format));
+                JSONObject entryData = result.getJSONObject("entry_data");
 
-            //displaying results
-            setToolbarTitle(entryData.getString("SUBJECT"));
-            media.setText(entryData.getString("MEDIA"));
-            page.setText(String.format(getResources().getString(R.string.page_placeholder), entryData.getString("PAGE")));
-            numbers.setText(String.format(getResources().getString(R.string.numbers_placeholder), entryData.getString("NUMBERS")));
-            until.setText(String.format(getResources().getString(R.string.until_placeholder), untilStr));
+                String untilStr = changeDateFormat(entryData.getString("UNTIL"), getResources().getString(R.string.server_date_format), getResources().getString(R.string.local_date_format));
 
-            //setting variables
-            subjectStr = entryData.getString("SUBJECT");
-            mediaStr = entryData.getString("MEDIA");
-            pageStr = entryData.getString("PAGE");
-            numbersStr = entryData.getString("NUMBERS");
-            this.untilStr = entryData.getString("UNTIL");
-            uploadID = entryData.getJSONObject("uploader_data").getInt("ID");
-            uploadName = entryData.getJSONObject("uploader_data").getString("USERNAME");
+                //displaying results
+                setToolbarTitle(entryData.getString("SUBJECT"));
+                media.setText(entryData.getString("MEDIA"));
+                page.setText(String.format(getResources().getString(R.string.page_placeholder), entryData.getString("PAGE")));
+                numbers.setText(String.format(getResources().getString(R.string.numbers_placeholder), entryData.getString("NUMBERS")));
+                until.setText(String.format(getResources().getString(R.string.until_placeholder), untilStr));
+
+                //setting variables
+                subjectStr = entryData.getString("SUBJECT");
+                mediaStr = entryData.getString("MEDIA");
+                pageStr = entryData.getString("PAGE");
+                numbersStr = entryData.getString("NUMBERS");
+                this.untilStr = entryData.getString("UNTIL");
+                uploadID = entryData.getJSONObject("uploader_data").getInt("ID");
+                uploadName = entryData.getJSONObject("uploader_data").getString("USERNAME");
+            } else {
+                switch(getErrorCode(result.getInt("error_code"))) {
+                    case MYSQL_ERROR:
+                        ToolbarActivity.instance.runOnUiThread(new Runnable(){
+                            @Override
+                            public void run(){
+                                Toast.makeText(ToolbarActivity.instance, getResources().getString(R.string.error_internal), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        FirebaseCrash.report(new MySQLException(result.getString("error")));
+                        break;
+                    case NO_ROWS_RETURNED:
+                        ToolbarActivity.instance.runOnUiThread(new Runnable(){
+                            @Override
+                            public void run(){
+                                Toast.makeText(ToolbarActivity.instance, getResources().getString(R.string.error_internal), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        FirebaseCrash.report(new MySQLException("Zero rows returned!"));
+                        break;
+                }
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {
@@ -135,7 +163,7 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
             ToolbarActivity.instance.runOnUiThread(new Runnable(){
                 @Override
                 public void run(){
-                    Toast.makeText(ToolbarActivity.instance, ToolbarActivity.instance.getResources().getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ToolbarActivity.instance, getResources().getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
                 }
             });
             e.printStackTrace();
@@ -157,6 +185,13 @@ public class HomeworkEntryDetailActivity extends ToolbarActivity {
         toast.show();
 
         setLoading(false);
+    }
+
+    @Override
+    protected void onNoConnection() {
+        super.onNoConnection();
+        setLoading(false);
+        finish();
     }
 
     private void tryKillNotification(int id) {

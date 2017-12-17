@@ -390,15 +390,6 @@ public class HomeworkListActivity extends ToolbarActivity {
         } catch (JSONException e) {
             Toast.makeText(getApplicationContext(), "A JSONError occurred! Please contact the developer.", Toast.LENGTH_LONG).show();
             e.printStackTrace();
-        } catch (NullPointerException e) {
-            //show toast in UI thread
-            ToolbarActivity.instance.runOnUiThread(new Runnable(){
-                @Override
-                public void run(){
-                    Toast.makeText(ToolbarActivity.instance, ToolbarActivity.instance.getResources().getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
-                }
-            });
-            e.printStackTrace();
         }
 
         swipeRefreshLayout.setRefreshing(false);
@@ -489,5 +480,12 @@ public class HomeworkListActivity extends ToolbarActivity {
                 setEntrys(object);
             }
         });
+    }
+
+    @Override
+    protected void onNoConnection() {
+        super.onNoConnection();
+        setLoading(false);
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

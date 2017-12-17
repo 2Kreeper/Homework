@@ -125,17 +125,14 @@ public class LoginActivity extends ToolbarActivity implements ToolbarActivity.On
             }
         } catch (JSONException e) {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-        } catch (NullPointerException e) {
-            //show toast in UI thread
-            ToolbarActivity.instance.runOnUiThread(new Runnable(){
-                @Override
-                public void run(){
-                    Toast.makeText(ToolbarActivity.instance, ToolbarActivity.instance.getResources().getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
-                }
-            });
-            e.printStackTrace();
         }
 
+        setLoading(false);
+    }
+
+    @Override
+    protected void onNoConnection() {
+        super.onNoConnection();
         setLoading(false);
     }
 }
