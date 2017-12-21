@@ -69,5 +69,6 @@
     <string name="error_internal">An internal error occured! The developer is already noticed</string>
     <string name="error_already_flagged">You have already flagged this entry!</string>
     <string name="error_not_in_course">You are not in a course called \"%1$s\"!</string>
+    <string name="error_no_internet_title">No connection!</string>
 
 </resources>

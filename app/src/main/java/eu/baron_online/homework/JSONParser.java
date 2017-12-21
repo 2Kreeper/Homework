@@ -1,5 +1,6 @@
 package eu.baron_online.homework;
 
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.IOException;
@@ -15,7 +16,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class JSONParser {
-	
+
+	@Nullable
 	public static JSONObject makeHttpRequest(String url, String type, HashMap<String, String> params) {
 		String paramString = "";
 		

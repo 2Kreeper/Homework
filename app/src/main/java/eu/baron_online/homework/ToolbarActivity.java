@@ -1,12 +1,19 @@
 package eu.baron_online.homework;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
@@ -36,6 +43,7 @@ public class ToolbarActivity extends AppCompatActivity {
     protected Toolbar toolbar;
     protected ProgressDialog progressDialog;
     protected static NotificationManager mNotificationManager;
+    protected ConnectivityManager cm;
 
     private int[] menuIgnoreArray = {};
 
@@ -46,6 +54,7 @@ public class ToolbarActivity extends AppCompatActivity {
         instance = this;
 
         mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         //init ProgressDialog
         progressDialog = new ProgressDialog(this);
@@ -58,6 +67,10 @@ public class ToolbarActivity extends AppCompatActivity {
             //user is not logged in and login data is saved
             DataInterchange.addValue("username", DataInterchange.getPersistentString("username"));
             DataInterchange.addValue("password", DataInterchange.getPersistentString("password"));
+        }
+
+        if(!isConnected()) {
+            showDialog(getResources().getString(R.string.error_no_internet_title), getResources().getString(R.string.error_no_internet), getResources().getString(android.R.string.ok), "");
         }
     }
 
@@ -153,6 +166,7 @@ public class ToolbarActivity extends AppCompatActivity {
         finish();
     }
 
+    @Nullable
     public static String sha256(String text) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -190,6 +204,7 @@ public class ToolbarActivity extends AppCompatActivity {
         return false;
     }
 
+    @Nullable
     public static String changeDateFormat(String date, String originalFmtString, String targetFmtString) {
         try {
             SimpleDateFormat originalFmt = new SimpleDateFormat(originalFmtString);
@@ -251,6 +266,58 @@ public class ToolbarActivity extends AppCompatActivity {
         });
     }
 
+    private boolean isConnected() {
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
+        return isConnected;
+    }
+
+    private int getConnectionType() {
+        return cm.getActiveNetworkInfo().getType();
+    }
+
+    protected enum ErrorCode {
+        INVALID_LOGIN, MYSQL_ERROR, ACTION_ALREADY_PERFORMED, MISSING_PERMISSION, MISSING_PARAMETER, INVALID_PARAMETER, NO_ROWS_RETURNED
+    }
+
+    protected void showDialog(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(message)
+                .setTitle(title);
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+    protected void showDialog(String title, String message, String positiveButtonText, String negativeButtonText) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(message)
+                .setTitle(title)
+                .setPositiveButton(positiveButtonText, null)
+                .setNegativeButton(negativeButtonText, null);
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+    protected void showDialog(String title, String message, String positiveButtonText, DialogInterface.OnClickListener positiveButtonListener, String negativeButtonText, DialogInterface.OnClickListener negativeButtonListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(message)
+                .setTitle(title)
+                .setPositiveButton(positiveButtonText, positiveButtonListener)
+                .setNegativeButton(negativeButtonText, negativeButtonListener);
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
     interface OnRequestFinishedListener {
         void onRequestFinished(JSONObject object);
     }
@@ -289,10 +356,6 @@ public class ToolbarActivity extends AppCompatActivity {
                 onNoConnection();
             }
         }
-    }
-
-    protected enum ErrorCode {
-        INVALID_LOGIN, MYSQL_ERROR, ACTION_ALREADY_PERFORMED, MISSING_PERMISSION, MISSING_PARAMETER, INVALID_PARAMETER, NO_ROWS_RETURNED
     }
 }
 
