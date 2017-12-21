@@ -71,5 +71,7 @@
     <string name="error_not_in_course">You are not in a course called \"%1$s\"!</string>
     <string name="error_no_internet_title">No connection!</string>
     <string name="warning_missing_username_or_password">Please enter username and password!</string>
+    <string name="flag_confirmation_title">Flag this entry?</string>
+    <string name="flag_confirmation_message">Do you really want to flag this entry?\nIf it happens to often that you falsely flag entrys, you will be banned!</string>
 
 </resources>

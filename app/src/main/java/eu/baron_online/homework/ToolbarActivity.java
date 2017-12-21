@@ -318,6 +318,19 @@ public class ToolbarActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    protected void showDialog(String title, String message, DialogInterface.OnClickListener positiveButtonListener, DialogInterface.OnClickListener negativeButtonListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(message)
+                .setTitle(title)
+                .setPositiveButton(getResources().getString(android.R.string.ok), positiveButtonListener)
+                .setNegativeButton(getResources().getString(android.R.string.cancel), negativeButtonListener);
+
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
     interface OnRequestFinishedListener {
         void onRequestFinished(JSONObject object);
     }

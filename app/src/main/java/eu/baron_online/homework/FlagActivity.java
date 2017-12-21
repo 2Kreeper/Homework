@@ -1,5 +1,6 @@
 package eu.baron_online.homework;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
@@ -78,25 +79,37 @@ public class FlagActivity extends ToolbarActivity {
         flagButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //flag entry
-                HashMap<String, String> params = new HashMap<>();
-                params.put("user", (String) DataInterchange.getValue("username"));
-                params.put("pass", (String) DataInterchange.getValue("password"));
-                params.put("homework_id", Integer.toString(flagID));
-                params.put("flag_reason", Integer.toString(localizedTitleToFlagId(flagReasonSpinner.getSelectedItem().toString())));
-
-                makeHTTPRequest("http://baron-online.eu/services/homework_entry_flag.php", params, new OnRequestFinishedListener() {
+                showDialog(getResources().getString(R.string.flag_confirmation_title), getResources().getString(R.string.flag_confirmation_message), new DialogInterface.OnClickListener() {
                     @Override
-                    public void onRequestFinished(JSONObject object) {
-                        try {
-                            if(object.getInt("success") == 1) {
-                                finish();
-                            } else {
-                                onFlagFailed(object.getInt("error_code"), object);
+                    public void onClick(DialogInterface dialog, int which) {
+                        //user confirmed flagging process
+                        HashMap<String, String> params = new HashMap<>();
+                        params.put("user", (String) DataInterchange.getValue("username"));
+                        params.put("pass", (String) DataInterchange.getValue("password"));
+                        params.put("homework_id", Integer.toString(flagID));
+                        params.put("flag_reason", Integer.toString(localizedTitleToFlagId(flagReasonSpinner.getSelectedItem().toString())));
+
+                        makeHTTPRequest("http://baron-online.eu/services/homework_entry_flag.php", params, new OnRequestFinishedListener() {
+                            @Override
+                            public void onRequestFinished(JSONObject object) {
+                                try {
+                                    if(object.getInt("success") == 1) {
+                                        startActivity(new Intent(getApplicationContext(), HomeworkListActivity.class));
+                                        finish();
+                                    } else {
+                                        onFlagFailed(object.getInt("error_code"), object);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        });
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //user canceled flagging
+                        finish();
                     }
                 });
             }
@@ -126,7 +139,7 @@ public class FlagActivity extends ToolbarActivity {
 
     private int localizedTitleToFlagId(String title) {
         int i = findIndex(getResources().getStringArray(R.array.flag_reasons), title);
-        if(i != 0) {
+        if(i != -1) {
             return i + 1;
         }
 
