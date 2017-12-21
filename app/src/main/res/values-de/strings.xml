@@ -61,4 +61,5 @@
     <string name="error_already_flagged">Du hast diese Hausaufgabe schon markiert!</string>
     <string name="error_not_in_course">Du bist in keinem Kurs mit dem Namen \"%1$s\"!</string>
     <string name="error_no_internet_title">Keine Verbindung!</string>
+    <string name="warning_missing_username_or_password">Bitte gib Benutzernamen und Passwort an!</string>
 </resources>

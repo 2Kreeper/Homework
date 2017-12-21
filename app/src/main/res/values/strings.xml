@@ -70,5 +70,6 @@
     <string name="error_already_flagged">You have already flagged this entry!</string>
     <string name="error_not_in_course">You are not in a course called \"%1$s\"!</string>
     <string name="error_no_internet_title">No connection!</string>
+    <string name="warning_missing_username_or_password">Please enter username and password!</string>
 
 </resources>

@@ -11,9 +11,12 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -57,17 +60,27 @@ public class LoginActivity extends ToolbarActivity implements ToolbarActivity.On
         username = (EditText) findViewById(R.id.loginUsernameInput);
         password = (EditText) findViewById(R.id.loginPasswordInput);
 
+        TextView.OnEditorActionListener onEditorActionListener = new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_DONE) {
+                    loginButton.callOnClick();
+                    return true;
+                }
+
+                return false;
+            }
+        };
+
+        username.setOnEditorActionListener(onEditorActionListener);
+        password.setOnEditorActionListener(onEditorActionListener);
+
         loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (TextUtils.isEmpty(username.getText().toString()) || TextUtils.isEmpty(password.getText().toString())) {
-                    Context context = getApplicationContext();
-                    CharSequence text = "Please enter a username and a password!";
-                    int duration = Toast.LENGTH_SHORT;
-
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.warning_missing_username_or_password), Toast.LENGTH_LONG).show();
                 } else {
                     setLoading(true);
                     checkForUser(username.getText().toString(), sha256(password.getText().toString()));
